@@ -5,8 +5,7 @@
 
 #include <Windows.h>
 
-#include "InputClass.h"
-#include "GraphicsClass.h"
+#include "ApplicationClass.h"
 
 class SystemClass
 {
@@ -30,9 +29,7 @@ private:
 	LPCWSTR m_applicationName;
 	HINSTANCE m_hinstance;
 	HWND m_hwnd;
-
-	InputClass *m_Input;
-	GraphicsClass *m_Graphics;
+	ApplicationClass *m_Application;
 };
 
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
