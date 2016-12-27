@@ -4,7 +4,7 @@
 #include "D3DClass.h"
 #include "InputClass.h"
 #include "ShaderManagerClass.h"
-#include "TimeClass.h"
+#include "TimerClass.h"
 #include "UserInterfaceClass.h"
 #include "CameraClass.h"
 #include "PositionClass.h"
