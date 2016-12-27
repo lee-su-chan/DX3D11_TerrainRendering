@@ -2,6 +2,9 @@
 
 InputClass::InputClass()
 {
+	m_directInput = 0;
+	m_keyboard = 0;
+	m_mouse = 0;
 }
 
 InputClass::InputClass(const InputClass &other)
@@ -12,35 +15,268 @@ InputClass::~InputClass()
 {
 }
 
-void InputClass::initialze()
+bool InputClass::initialze(HINSTANCE hinstance,
+	HWND hwnd, 
+	int screenWidth,
+	int screenHeight)
 {
-	int i;
+	HRESULT result;
 
-	// Initialze all the keys to being released nad not prosseed.
-	for (i = 0; i < 256; ++i)
-		m_keys[i] = false;
+	m_screenWidth = screenWidth;
+	m_screenHeight = screenHeight;
+
+	m_mouseX = 0;
+	m_mouseY = 0;
+
+	result = DirectInput8Create(hinstance,
+		DIRECTINPUT_VERSION,
+		IID_IDirectInput8,
+		(void **)m_directInput,
+		NULL);
+
+	if (FAILED(result))
+		return false;
+
+	result = m_directInput->CreateDevice(GUID_SysKeyboard, &m_keyboard, NULL);
+	if (FAILED(result))
+		return false;
+
+	result = m_keyboard->SetDataFormat(&c_dfDIKeyboard);
+	if (FAILED(result))
+		return false;
+
+	result = m_keyboard->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+	if (FAILED(result))
+		return false;
+
+	result = m_keyboard->Acquire();
+	if (FAILED(result))
+		return false;
+
+	result = m_directInput->CreateDevice(GUID_SysMouse, &m_mouse, NULL);
+	if (FAILED(result))
+		return false;
+
+	result = m_mouse->SetDataFormat(&c_dfDIMouse);
+	if (FAILED(result))
+		return false;
+
+	result = m_mouse->SetCooperativeLevel(hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+	if (FAILED(result))
+		return false;
+
+	result = m_mouse->Acquire();
+	if (FAILED(result))
+		return false;
+
+	m_F1_released = true;
+	m_F2_released = true;
+
+	return true;
+}
+
+void InputClass::Shutdown()
+{
+	if (m_mouse)
+	{
+		m_mouse->Unacquire();
+		m_mouse->Release();
+		m_mouse = NULL;
+	}
+
+	if (m_keyboard)
+	{
+		m_keyboard->Unacquire();
+		m_keyboard->Release();
+		m_keyboard = NULL;
+	}
+
+	if (m_directInput)
+	{
+		m_directInput->Release();
+		m_directInput = NULL;
+	}
 
 	return;
 }
 
-void InputClass::KeyDown(unsigned int input)
+bool InputClass::Frame()
 {
-	// If a key is pressed then save that state in the key array.
-	m_keys[input] = true;
+	bool result;
+
+	result = ReadKeyboard();
+	if (!result)
+		return false;
+
+	result = ReadMouse();
+	if (!result)
+		return false;
+
+	ProcessInput();
+
+	return true;
+}
+
+bool InputClass::IsEscapePressed()
+{
+	if (m_keyboardState[DIK_ESCAPE] & 0x80)
+		return true;
+
+	return false;
+}
+
+void InputClass::GetMouseLocation(int &mouseX, int &mouseY)
+{
+	mouseX = m_mouseX;
+	mouseY = m_mouseY;
 
 	return;
 }
 
-void InputClass::KeyUp(unsigned int input)
+bool InputClass::IsLeftPressed()
 {
-	// If a key is pressed then clear that state in the key array.
-	m_keys[input] = true;
+	if (m_keyboardState[DIK_LEFT] & 0x80)
+		return true;
 
-	return;
+	return false;
 }
 
-bool InputClass::IsKeyDown(unsigned int key)
+bool InputClass::IsRightPressed()
 {
-	// Return what state the key is in (pressed / not pressed).
-	return m_keys[key];
+	if (m_keyboardState[DIK_RIGHT] & 0x80)
+		return true;
+
+	return false;
+}
+
+bool InputClass::IsUpPressed()
+{
+	if (m_keyboardState[DIK_UP] & 0x80)
+		return true;
+
+	return false;
+}
+
+bool InputClass::IsDownPressed()
+{
+	if (m_keyboardState[DIK_DOWN] & 0x80)
+		return true;
+
+	return false;
+}
+
+bool InputClass::IsAPressed()
+{
+	if (m_keyboardState[DIK_A] & 0x80)
+		return true;
+
+	return false;
+}
+
+bool InputClass::IsZPressed()
+{
+	if (m_keyboardState[DIK_Z] & 0x80)
+		return true;
+
+	return false;
+}
+
+bool InputClass::IsPgUpPressed()
+{
+	if (m_keyboardState[DIK_PGUP] & 0x80)
+		return true;
+
+	return false;
+}
+
+bool InputClass::IsPgDownPressed()
+{
+	if (m_keyboardState[DIK_PGDN] & 0x80)
+		return true;
+
+	return false;
+}
+
+bool InputClass::IsF1Toggled()
+{
+	if (m_keyboardState[DIK_F1] & 0x80)
+	{
+		if (m_F1_released)
+		{
+			m_F1_released = false;
+			
+			return true;
+		}
+	}
+	else
+	{
+		m_F1_released = true;
+	}
+
+	return false;
+}
+
+bool InputClass::IsF2Toggled()
+{
+	if (m_keyboardState[DIK_F2] & 0x80)
+	{
+		if (m_F2_released)
+		{
+			m_F2_released = false;
+
+			return true;
+		}
+	}
+	else
+	{
+		m_F2_released = true;
+	}
+
+	return false;
+}
+
+bool InputClass::ReadKeyboard()
+{
+	HRESULT result;
+
+	result = m_keyboard->GetDeviceState(sizeof(m_keyboardState), (LPVOID)&m_keyboardState);
+	if (FAILED(result))
+	{
+		if (result == DIERR_INPUTLOST || result == DIERR_NOTACQUIRED)
+			m_keyboard->Acquire();
+		else
+			return false;
+	}
+
+	return true;
+}
+
+bool InputClass::ReadMouse()
+{
+	HRESULT result;
+
+	result = m_mouse->GetDeviceState(sizeof(DIMOUSESTATE), (LPVOID)&m_mouseState);
+	if (FAILED(result))
+	{
+		if (result == DIERR_INPUTLOST || result == DIERR_NOTACQUIRED)
+			m_mouse->Acquire();
+		else
+			return false;
+	}
+
+	return true;
+}
+
+void InputClass::ProcessInput()
+{
+	m_mouseX += m_mouseState.lX;
+	m_mouseY += m_mouseState.lY;
+
+	if (m_mouseX < 0) m_mouseX = 0;
+	if (m_mouseY < 0) m_mouseY = 0;
+
+	if (m_mouseX > m_screenWidth) m_mouseX = m_screenWidth;
+	if (m_mouseY > m_screenHeight) m_mouseY = m_screenHeight;
+
+	return;
 }
