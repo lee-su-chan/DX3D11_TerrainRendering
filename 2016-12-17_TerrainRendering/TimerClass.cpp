@@ -1,18 +1,18 @@
-#include "TimeClass.h"
+#include "TimerClass.h"
 
-TimeClass::TimeClass()
+TimerClass::TimerClass()
 {
 }
 
-TimeClass::TimeClass(const TimeClass &other)
+TimerClass::TimerClass(const TimerClass &other)
 {
 }
 
-TimeClass::~TimeClass()
+TimerClass::~TimerClass()
 {
 }
 
-bool TimeClass::Initialize()
+bool TimerClass::Initialize()
 {
 	INT64 frequency;
 
@@ -28,7 +28,7 @@ bool TimeClass::Initialize()
 	return true;
 }
 
-void TimeClass::Frame()
+void TimerClass::Frame()
 {
 	INT64 currentTime;
 	INT64 elapsedTicks;
@@ -42,26 +42,26 @@ void TimeClass::Frame()
 	return;
 }
 
-float TimeClass::GetTime()
+float TimerClass::GetTime()
 {
 	return m_frameTime;
 }
 
-void TimeClass::StartTimer()
+void TimerClass::StartTimer()
 {
 	QueryPerformanceCounter((LARGE_INTEGER *)&m_beginTime);
 
 	return;
 }
 
-void TimeClass::StopTimer()
+void TimerClass::StopTimer()
 {
 	QueryPerformanceCounter((LARGE_INTEGER *)&m_endTime);
 
 	return;
 }
 
-int TimeClass::GetTiming()
+int TimerClass::GetTiming()
 {
 	float elapsedTicks;
 	INT64 frequency;

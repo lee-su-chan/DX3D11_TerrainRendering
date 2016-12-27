@@ -1,14 +1,14 @@
-#ifndef _TIMECLASS_H_
-#define _TIMECLASS_H_
+#ifndef _TIMERCLASS_H_
+#define _TIMERCLASS_H_
 
 #include <Windows.h>
 
-class TimeClass
+class TimerClass
 {
 public:
-	TimeClass();
-	TimeClass(const TimeClass &);
-	~TimeClass();
+	TimerClass();
+	TimerClass(const TimerClass &);
+	~TimerClass();
 
 	bool Initialize();
 	void Frame();
