@@ -112,7 +112,6 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 	m_videoCardMemory = (int)(adapterDesc.DedicatedVideoMemory / 1024 / 1024);
 
 	// Convert the name of the video card to a character array and store it.
-	// size_t, char *, size_t, const wchar_t, size_t
 	error = wcstombs_s(&stringLength, m_videoCardDescription, 128, adapterDesc.Description, 128);
 	
 	if (error != 0)
@@ -330,7 +329,7 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 		return false;
 
 	// Now set the rasterizer state.
-	// m_deviceContext->RSSetState(m_rasterState);
+	 m_deviceContext->RSSetState(m_rasterState);
 
 	// Setup the viewport for rendering.
 	viewport.Width = (float)screenWidth;
@@ -384,7 +383,7 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 	blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 	blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
 	blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
-	blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+	blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
 	blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
 	blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
 
