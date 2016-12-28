@@ -77,7 +77,7 @@ bool TerrainClass::InitializeBuffers(ID3D11Device *device)
 		{
 			// Line 1 - Upper left
 			positionX = (float)i;
-			positionZ = (float)(j + i);
+			positionZ = (float)(j + 1);
 
 			vertices[index].position = XMFLOAT3(positionX, 0.0f, positionZ);
 			vertices[index].color = color;
