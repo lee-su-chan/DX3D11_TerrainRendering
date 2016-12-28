@@ -31,7 +31,7 @@ bool InputClass::initialze(HINSTANCE hinstance,
 	result = DirectInput8Create(hinstance,
 		DIRECTINPUT_VERSION,
 		IID_IDirectInput8,
-		(void **)m_directInput,
+		(void **)&m_directInput,
 		NULL);
 
 	if (FAILED(result))
