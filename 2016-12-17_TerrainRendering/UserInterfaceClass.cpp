@@ -101,7 +101,7 @@ bool UserInterfaceClass::Initialize(D3DClass *Direct3D, int screenHeight, int sc
 		32,
 		false,
 		m_font1,
-		videoString,
+		memoryString,
 		10,
 		30,
 		1.0f,
