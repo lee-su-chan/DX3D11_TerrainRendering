@@ -36,7 +36,7 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance,
 		
 		return false;
 	}
-
+	
 	m_Direct3D = new D3DClass;
 	if (!m_Direct3D)
 		return false;
@@ -75,7 +75,7 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance,
 	result = m_Timer->Initialize();
 	if (!result)
 	{
-		MessageBox(hwnd, L"Could not initialize the tiemr object.", L"Error", MB_OK);
+		MessageBox(hwnd, L"Could not initialize the timer object.", L"Error", MB_OK);
 
 		return false;
 	}
