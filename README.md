@@ -4,7 +4,7 @@
 http://www.rastertek.com/tutdx11s2ter.html
 
 
-## Process Report
+## Report
 
 ### 2016-12-30(Tutorial 1)  
 ![default](https://cloud.githubusercontent.com/assets/13383741/21547893/439056c0-ce2c-11e6-9f80-9c2fae5e415a.PNG)  
