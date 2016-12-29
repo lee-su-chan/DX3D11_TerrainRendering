@@ -207,7 +207,7 @@ bool ZoneClass::Render(D3DClass *direct3D, ShaderManagerClass *shaderManager)
 			shaderManager,
 			worldMatrix,
 			baseViewMatrix,
-			orthoMatrix);
+			orthoMatrix);	
 
 		if (!result)
 			return false;

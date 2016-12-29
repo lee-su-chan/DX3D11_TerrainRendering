@@ -53,7 +53,7 @@ bool UserInterfaceClass::Initialize(D3DClass *Direct3D, int screenHeight, int sc
 		m_font1,
 		"Fps: 0",
 		10,
-		50,
+		-50,
 		0.0f,
 		1.0f,
 		0.0f);
@@ -86,7 +86,7 @@ bool UserInterfaceClass::Initialize(D3DClass *Direct3D, int screenHeight, int sc
 		m_font1,
 		videoString,
 		10,
-		10,
+		-10,
 		1.0f,
 		1.0f,
 		1.0f);
@@ -103,7 +103,7 @@ bool UserInterfaceClass::Initialize(D3DClass *Direct3D, int screenHeight, int sc
 		m_font1,
 		memoryString,
 		10,
-		30,
+		-30,
 		1.0f,
 		1.0f,
 		1.0f);
@@ -124,7 +124,7 @@ bool UserInterfaceClass::Initialize(D3DClass *Direct3D, int screenHeight, int sc
 		m_font1,
 		"X: 0",
 		10,
-		310,
+		-310,
 		1.0f,
 		1.0f,
 		1.0f);
@@ -141,7 +141,7 @@ bool UserInterfaceClass::Initialize(D3DClass *Direct3D, int screenHeight, int sc
 		m_font1,
 		"Y: 0",
 		10,
-		330,
+		-330,
 		1.0f,
 		1.0f,
 		1.0f);
@@ -158,7 +158,7 @@ bool UserInterfaceClass::Initialize(D3DClass *Direct3D, int screenHeight, int sc
 		m_font1,
 		"Z: 0",
 		10,
-		350,
+		-350,
 		1.0f,
 		1.0f,
 		1.0f);
@@ -175,7 +175,7 @@ bool UserInterfaceClass::Initialize(D3DClass *Direct3D, int screenHeight, int sc
 		m_font1,
 		"rX: 0",
 		10,
-		370,
+		-370,
 		1.0f,
 		1.0f,
 		1.0f);
@@ -192,7 +192,7 @@ bool UserInterfaceClass::Initialize(D3DClass *Direct3D, int screenHeight, int sc
 		m_font1,
 		"rY: 0",
 		10,
-		390,
+		-390,
 		1.0f,
 		1.0f,
 		1.0f);
@@ -209,7 +209,7 @@ bool UserInterfaceClass::Initialize(D3DClass *Direct3D, int screenHeight, int sc
 		m_font1,
 		"rZ: 0",
 		10,
-		410,
+		-410,
 		1.0f,
 		1.0f,
 		1.0f);
@@ -362,7 +362,7 @@ bool UserInterfaceClass::UpdateFpsString(ID3D11DeviceContext *deviceContext, int
 	if (fps >= 60)
 	{
 		red = 0.0f;
-		green = 0.0f;
+		green = 1.0f;
 		blue = 0.0;
 	}
 	if (fps < 60)
@@ -382,7 +382,7 @@ bool UserInterfaceClass::UpdateFpsString(ID3D11DeviceContext *deviceContext, int
 		m_font1,
 		finalString,
 		10,
-		50,
+		-50,
 		red,
 		green,
 		blue);
@@ -423,7 +423,7 @@ bool UserInterfaceClass::UpdatePositionStrings(ID3D11DeviceContext *deviceContex
 			m_font1,
 			finalString,
 			10,
-			100,
+			-100,
 			1.0f,
 			1.0f,
 			1.0f);
@@ -441,7 +441,7 @@ bool UserInterfaceClass::UpdatePositionStrings(ID3D11DeviceContext *deviceContex
 			m_font1,
 			finalString,
 			10,
-			120,
+			-120,
 			1.0f,
 			1.0f,
 			1.0f);
@@ -459,7 +459,7 @@ bool UserInterfaceClass::UpdatePositionStrings(ID3D11DeviceContext *deviceContex
 			m_font1,
 			finalString,
 			10,
-			140,
+			-140,
 			1.0f,
 			1.0f,
 			1.0f);
@@ -478,7 +478,7 @@ bool UserInterfaceClass::UpdatePositionStrings(ID3D11DeviceContext *deviceContex
 			m_font1,
 			finalString,
 			10,
-			180,
+			-180,
 			1.0f,
 			1.0f,
 			1.0f);
@@ -496,7 +496,7 @@ bool UserInterfaceClass::UpdatePositionStrings(ID3D11DeviceContext *deviceContex
 			m_font1,
 			finalString,
 			10,
-			200,
+			-200,
 			1.0f,
 			1.0f,
 			1.0f);
@@ -514,7 +514,7 @@ bool UserInterfaceClass::UpdatePositionStrings(ID3D11DeviceContext *deviceContex
 			m_font1,
 			finalString,
 			10,
-			220,
+			-220,
 			1.0f,
 			1.0f,
 			1.0f);

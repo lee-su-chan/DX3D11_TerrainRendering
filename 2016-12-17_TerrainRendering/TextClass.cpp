@@ -304,7 +304,7 @@ void TextClass::RenderSentence(ID3D11DeviceContext *deviceContext,
 		viewMatrix,
 		orthoMatrix,
 		fontTexture,
-		shadowColor);
+		m_pixelColor);
 
 	return;
 }

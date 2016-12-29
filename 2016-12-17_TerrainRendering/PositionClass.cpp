@@ -74,12 +74,12 @@ void PositionClass::MoveForward(bool keydown)
 	{
 		m_forwardSpeed += m_frameTime * 1.0f;
 
-		if (m_forwardSpeed > m_frameTime * 10.0f)
-			m_forwardSpeed = m_frameTime * 10.0f;
+		if (m_forwardSpeed > m_frameTime * 50.0f)
+			m_forwardSpeed = m_frameTime * 50.0f;
 	}
 	else
 	{
-		m_forwardSpeed -= m_frameTime * 0.07f;
+		m_forwardSpeed -= m_frameTime * 0.5f;
 
 		if (m_forwardSpeed < 0.0f)
 			m_forwardSpeed = 0.0f;
@@ -105,12 +105,12 @@ void PositionClass::MoveBackward(bool keydown)
 	{
 		m_backwardSpeed += m_frameTime * 1.0f;
 
-		if (m_backwardSpeed > m_frameTime * 10.0f)
-			m_backwardSpeed = m_frameTime * 10.0f;
+		if (m_backwardSpeed > m_frameTime * 50.0f)
+			m_backwardSpeed = m_frameTime * 50.0f;
 	}
 	else
 	{
-		m_backwardSpeed -= m_frameTime * 0.07f;
+		m_backwardSpeed -= m_frameTime * 0.5f;
 
 		if (m_backwardSpeed < 0.0f)
 			m_backwardSpeed = 0.0f;
