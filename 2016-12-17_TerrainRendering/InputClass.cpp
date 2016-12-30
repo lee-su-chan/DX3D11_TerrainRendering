@@ -165,6 +165,22 @@ bool InputClass::IsDownPressed()
 	return false;
 }
 
+bool InputClass::IsWPressed()
+{
+	if (m_keyboardState[DIK_W] & 0x80)
+		return true;
+
+	return false;
+}
+
+bool InputClass::IsXPressed()
+{
+	if (m_keyboardState[DIK_X] & 0x80)
+		return true;
+
+	return false;
+}
+
 bool InputClass::IsAPressed()
 {
 	if (m_keyboardState[DIK_A] & 0x80)
@@ -173,9 +189,9 @@ bool InputClass::IsAPressed()
 	return false;
 }
 
-bool InputClass::IsZPressed()
+bool InputClass::IsDPressed()
 {
-	if (m_keyboardState[DIK_Z] & 0x80)
+	if (m_keyboardState[DIK_D] & 0x80)
 		return true;
 
 	return false;

@@ -26,8 +26,10 @@ public:
 	bool IsRightPressed();
 	bool IsUpPressed();
 	bool IsDownPressed();
+	bool IsWPressed();
+	bool IsXPressed();
 	bool IsAPressed();
-	bool IsZPressed();
+	bool IsDPressed();
 	bool IsPgUpPressed();
 	bool IsPgDownPressed();
 
