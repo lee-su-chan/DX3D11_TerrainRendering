@@ -434,7 +434,7 @@ bool UserInterfaceClass::UpdatePositionStrings(ID3D11DeviceContext *deviceContex
 	if (positionY != m_previousPosition[1])
 	{
 		m_previousPosition[1] = positionY;
-		_itoa_s(positionX, tempString, 10);
+		_itoa_s(positionY, tempString, 10);
 		strcpy_s(finalString, "Y: ");
 		strcat_s(finalString, tempString);
 		result = m_positionStrings[1].UpdateSentence(deviceContext,
@@ -471,7 +471,7 @@ bool UserInterfaceClass::UpdatePositionStrings(ID3D11DeviceContext *deviceContex
 	if (rotationX != m_previousPosition[3])
 	{
 		m_previousPosition[3] = rotationX;
-		_itoa_s(positionX, tempString, 10);
+		_itoa_s(rotationX, tempString, 10);
 		strcpy_s(finalString, "rX: ");
 		strcat_s(finalString, tempString);
 		result = m_positionStrings[3].UpdateSentence(deviceContext,
@@ -489,7 +489,7 @@ bool UserInterfaceClass::UpdatePositionStrings(ID3D11DeviceContext *deviceContex
 	if (rotationY != m_previousPosition[4])
 	{
 		m_previousPosition[4] = rotationY;
-		_itoa_s(positionX, tempString, 10);
+		_itoa_s(rotationY, tempString, 10);
 		strcpy_s(finalString, "rY: ");
 		strcat_s(finalString, tempString);
 		result = m_positionStrings[4].UpdateSentence(deviceContext,
@@ -507,7 +507,7 @@ bool UserInterfaceClass::UpdatePositionStrings(ID3D11DeviceContext *deviceContex
 	if (rotationZ != m_previousPosition[5])
 	{
 		m_previousPosition[5] = rotationX;
-		_itoa_s(positionX, tempString, 10);
+		_itoa_s(rotationZ, tempString, 10);
 		strcpy_s(finalString, "rZ: ");
 		strcat_s(finalString, tempString);
 		result = m_positionStrings[5].UpdateSentence(deviceContext,
