@@ -152,11 +152,17 @@ void ZoneClass::HandleMovementInput(InputClass *input, float frameTime)
 	keyDown = input->IsDownPressed();
 	m_Position->MoveBackward(keyDown);
 
-	keyDown = input->IsAPressed();
+	keyDown = input->IsWPressed();
 	m_Position->MoveUpward(keyDown);
 
-	keyDown = input->IsZPressed();
+	keyDown = input->IsXPressed();
 	m_Position->MoveDownward(keyDown);
+
+	keyDown = input->IsAPressed();
+	m_Position->MoveLeftward(keyDown);
+
+	keyDown = input->IsDPressed();
+	m_Position->MoveRightward(keyDown);
 
 	keyDown = input->IsPgUpPressed();
 	m_Position->LookUpward(keyDown);
