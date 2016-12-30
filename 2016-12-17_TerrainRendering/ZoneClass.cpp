@@ -48,14 +48,14 @@ bool ZoneClass::Initialize(D3DClass *direct3D,
 	if (!m_Position)
 		return false;
 
-	m_Position->SetPosition(128.0f, 5.0f, -10.0f);
+	m_Position->SetPosition(128.0f, 10.0f, -10.0f);
 	m_Position->SetRotation(0.0f, 0.0f, 0.0f);
 
 	m_Terrain = new TerrainClass;
 	if (!m_Terrain)
 		return false;
 
-	result = m_Terrain->Initialize(direct3D->GetDevice());
+	result = m_Terrain->Initialize(direct3D->GetDevice(), "data/Setup.txt");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the terrain object.", L"Error", MB_OK);
@@ -64,6 +64,7 @@ bool ZoneClass::Initialize(D3DClass *direct3D,
 	}
 
 	m_displayUI = true;
+	m_wireFrame = true;
 
 	return true;
 }
@@ -172,6 +173,9 @@ void ZoneClass::HandleMovementInput(InputClass *input, float frameTime)
 	if (input->IsF1Toggled())
 		m_displayUI = !m_displayUI;
 
+	if (input->IsF2Toggled())
+		m_wireFrame = !m_wireFrame;
+
 	return;
 }
 
@@ -190,6 +194,9 @@ bool ZoneClass::Render(D3DClass *direct3D, ShaderManagerClass *shaderManager)
 
 	direct3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
+	if (m_wireFrame)
+		direct3D->EnableWireframe();
+
 	m_Terrain->Render(direct3D->GetDeviceContext());
 
 	result = shaderManager->RenderColorShader(direct3D->GetDeviceContext(),
@@ -200,6 +207,9 @@ bool ZoneClass::Render(D3DClass *direct3D, ShaderManagerClass *shaderManager)
 
 	if (!result)
 		return false;
+
+	if (m_wireFrame)
+		direct3D->DisableWireframe();
 
 	if (m_displayUI)
 	{
