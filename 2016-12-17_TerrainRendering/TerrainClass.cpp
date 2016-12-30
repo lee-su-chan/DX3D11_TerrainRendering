@@ -82,7 +82,7 @@ bool TerrainClass::LoadSetupFile(char *filename)
 		return false;
 
 	fin.get(input);
-	if (input != ':')
+	while (input != ':')
 		fin.get(input);
 	fin >> m_terrainFilename;
 
@@ -261,9 +261,9 @@ bool TerrainClass::BuildTerrainModel()
 			++index;
 
 			// Triangle 2 - Bottom right.
-			m_terrainModel[index].x = m_heightMap[index4].x;
-			m_terrainModel[index].y = m_heightMap[index4].y;
-			m_terrainModel[index].z = m_heightMap[index4].z;
+			m_terrainModel[index].x = m_heightMap[index2].x;
+			m_terrainModel[index].y = m_heightMap[index2].y;
+			m_terrainModel[index].z = m_heightMap[index2].z;
 			++index;
 
 			// Triangle 1 - Upper left.
