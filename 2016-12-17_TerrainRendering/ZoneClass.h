@@ -4,6 +4,7 @@
 #include "D3DClass.h"
 #include "InputClass.h"
 #include "ShaderManagerClass.h"
+#include "TextureManagerClass.h"
 #include "TimerClass.h"
 #include "UserInterfaceClass.h"
 #include "CameraClass.h"
@@ -19,11 +20,11 @@ public:
 
 	bool Initialize(D3DClass *, HWND, int, int, float);
 	void Shutdown();
-	bool Frame(D3DClass *, InputClass *, ShaderManagerClass *, float, int);
+	bool Frame(D3DClass *, InputClass *, ShaderManagerClass *, TextureManagerClass *, float, int);
 
 private:
 	void HandleMovementInput(InputClass *, float);
-	bool Render(D3DClass *, ShaderManagerClass *);
+	bool Render(D3DClass *, ShaderManagerClass *, TextureManagerClass *);
 
 private:
 	UserInterfaceClass *m_UserInterface;

@@ -103,6 +103,7 @@ void ZoneClass::Shutdown()
 bool ZoneClass::Frame(D3DClass *direct3D, 
 	InputClass *input,
 	ShaderManagerClass *shaderManager, 
+	TextureManagerClass *textureManager,
 	float frameTime,
 	int fps)
 {
@@ -126,7 +127,7 @@ bool ZoneClass::Frame(D3DClass *direct3D,
 	if (!result)
 		return false;
 
-	result = Render(direct3D, shaderManager);
+	result = Render(direct3D, shaderManager, textureManager);
 	if (!result)
 		return false;
 
@@ -185,7 +186,9 @@ void ZoneClass::HandleMovementInput(InputClass *input, float frameTime)
 	return;
 }
 
-bool ZoneClass::Render(D3DClass *direct3D, ShaderManagerClass *shaderManager)
+bool ZoneClass::Render(D3DClass *direct3D, 
+	ShaderManagerClass *shaderManager,
+	TextureManagerClass *textureManager)
 {
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrix, orthoMatrix;
 	bool result;
@@ -205,11 +208,12 @@ bool ZoneClass::Render(D3DClass *direct3D, ShaderManagerClass *shaderManager)
 
 	m_Terrain->Render(direct3D->GetDeviceContext());
 
-	result = shaderManager->RenderColorShader(direct3D->GetDeviceContext(),
+	result = shaderManager->RenderTextureShader(direct3D->GetDeviceContext(),
 		m_Terrain->GetIndexCount(),
 		worldMatrix,
 		viewMatrix,
-		projectionMatrix);
+		projectionMatrix,
+		textureManager->GetTexture(1));
 
 	if (!result)
 		return false;
