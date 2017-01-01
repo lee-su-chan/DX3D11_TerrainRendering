@@ -5,7 +5,7 @@ TextureManagerClass::TextureManagerClass()
 	m_TextureArray = 0;
 }
 
-TextureManagerClass::TextureManagerClass(const TextureManagerClass &)
+TextureManagerClass::TextureManagerClass(const TextureManagerClass &other)
 {
 }
 
