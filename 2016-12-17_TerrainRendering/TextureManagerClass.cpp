@@ -48,7 +48,7 @@ bool TextureManagerClass::LoadTexture(ID3D11Device *device,
 	bool result;
 
 	result = m_TextureArray[location].Initialize(device, deviceContext, filename);
-	if (result)
+	if (!result)
 		return false;
 
 	return true;
