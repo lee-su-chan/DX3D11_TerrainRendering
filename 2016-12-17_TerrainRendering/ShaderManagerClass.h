@@ -3,6 +3,7 @@
 
 #include "D3DClass.h"
 #include "ColorshaderClass.h"
+#include "TextureShaderClass.h"
 #include "FontShaderClass.h"
 
 class ShaderManagerClass
@@ -16,10 +17,12 @@ public:
 	void Shutdown();
 
 	bool RenderColorShader(ID3D11DeviceContext *, int, XMMATRIX, XMMATRIX, XMMATRIX);
+	bool RenderTextureShader(ID3D11DeviceContext *, int, XMMATRIX, XMMATRIX, XMMATRIX, ID3D11ShaderResourceView *);
 	bool RenderFontShader(ID3D11DeviceContext *, int, XMMATRIX, XMMATRIX, XMMATRIX, ID3D11ShaderResourceView *, XMFLOAT4);
 
 private:
 	ColorShaderClass *m_ColorShader;
+	TextureShaderClass *m_TextureShader;
 	FontShaderClass *m_FontShader;
 };
 
