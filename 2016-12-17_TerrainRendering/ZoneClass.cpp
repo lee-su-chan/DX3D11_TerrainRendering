@@ -4,6 +4,7 @@ ZoneClass::ZoneClass()
 {
 	m_UserInterface = 0;
 	m_Camera = 0;
+	m_Light = 0;
 	m_Position = 0;
 	m_Terrain = 0;
 }
@@ -44,6 +45,13 @@ bool ZoneClass::Initialize(D3DClass *direct3D,
 	m_Camera->Render();
 	m_Camera->RenderBaseViewMatrix();
 
+	m_Light = new LightClass;
+	if (!m_Light)
+		return false;
+
+	m_Light->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+	m_Light->SetDirection(-0.5f, -1.0f, -0.5f);
+
 	m_Position = new PositionClass;
 	if (!m_Position)
 		return false;
@@ -82,6 +90,12 @@ void ZoneClass::Shutdown()
 	{
 		delete m_Position;
 		m_Position = NULL;
+	}
+
+	if (m_Light)
+	{
+		delete m_Light;
+		m_Light = NULL;
 	}
 
 	if (m_Camera)
@@ -208,12 +222,14 @@ bool ZoneClass::Render(D3DClass *direct3D,
 
 	m_Terrain->Render(direct3D->GetDeviceContext());
 
-	result = shaderManager->RenderTextureShader(direct3D->GetDeviceContext(),
+	result = shaderManager->RenderLightShader(direct3D->GetDeviceContext(),
 		m_Terrain->GetIndexCount(),
 		worldMatrix,
 		viewMatrix,
 		projectionMatrix,
-		textureManager->GetTexture(1));
+		textureManager->GetTexture(0),
+		m_Light->GetDirection(),
+		m_Light->GetDiffuseColor());
 
 	if (!result)
 		return false;
