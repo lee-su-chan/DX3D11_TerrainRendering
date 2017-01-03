@@ -31,6 +31,10 @@ bool TerrainClass::Initialize(ID3D11Device *device, char *setupFilename)
 
 	SetTerrainCoordinates();
 
+	result = CalculateNormals();
+	if (!result)
+		return false;
+
 	result = BuildTerrainModel();
 	if (!result)
 		return false;
@@ -213,6 +217,122 @@ void TerrainClass::SetTerrainCoordinates()
 	return;
 }
 
+bool TerrainClass::CalculateNormals()
+{
+	int i, j, index1, index2, index3, index;
+	float vertex1[3], vertex2[3], vertex3[3], vector1[3], vector2[3], sum[3], length;
+	VectorType *normals;
+
+	normals = new VectorType[(m_terrainHeight - 1) * (m_terrainWidth - 1)];
+	if (!normals)
+		return false;
+
+	for (j = 0; j < m_terrainHeight - 1; ++j)
+	{
+		for (i = 0; i < m_terrainWidth - 1; ++i)
+		{
+			index1 = (j + 1) * m_terrainWidth + i;			// Bottom left vertex.
+			index2 = (j + 1) * m_terrainWidth + (i + 1);	// Bottom right vertex.
+			index3 = j * m_terrainWidth + i;				// Upper left vertex.
+
+			vertex1[0] = m_heightMap[index1].x;
+			vertex1[1] = m_heightMap[index1].y;
+			vertex1[2] = m_heightMap[index1].z;
+
+			vertex2[0] = m_heightMap[index2].x;
+			vertex2[1] = m_heightMap[index2].y;
+			vertex2[2] = m_heightMap[index2].z;
+
+			vertex3[0] = m_heightMap[index3].x;
+			vertex3[1] = m_heightMap[index3].y;
+			vertex3[2] = m_heightMap[index3].z;
+
+			vector1[0] = vertex1[0] - vertex3[0];
+			vector1[1] = vertex1[1] - vertex3[1];
+			vector1[2] = vertex1[2] - vertex3[2];
+			vector2[1] = vertex3[0] - vertex2[0];
+			vector2[1] = vertex3[1] - vertex2[1];
+			vector2[1] = vertex3[2] - vertex2[2];
+
+			index = j * (m_terrainWidth - 1) + i;
+
+			normals[index].x = vector1[1] * vector2[2] - vector1[2] * vector2[1];
+			normals[index].y = vector1[2] * vector2[0] - vector1[0] * vector2[2];
+			normals[index].z = vector1[0] * vector2[1] - vector1[1] * vector2[0];
+
+			length = (float)sqrt(normals[index].x * normals[index].x +
+				normals[index].y * normals[index].y +
+				normals[index].z * normals[index].z);
+
+			normals[index].x = normals[index].x / length;
+			normals[index].y = normals[index].y / length;
+			normals[index].z = normals[index].z / length;
+		}
+	}
+
+	for (j = 0; j < m_terrainHeight; ++j)
+	{
+		for (i = 0; i < m_terrainWidth; ++i)
+		{
+			sum[0] = 0.0f;
+			sum[1] = 0.0f;
+			sum[2] = 0.0f;
+
+			// Bottom left face.
+			if (i - 1 >= 0 && j - 1 >= 0)
+			{
+				index = (j - 1) * (m_terrainWidth - 1) + (i - 1);
+
+				sum[0] += normals[index].x;
+				sum[1] += normals[index].y;
+				sum[2] += normals[index].z;
+			}
+
+			// Bottom right face.
+			if (i < m_terrainWidth - 1 && j - 1 >= 0)
+			{
+				index = (j - 1) * (m_terrainWidth - 1) + i;
+
+				sum[0] += normals[index].x;
+				sum[1] += normals[index].y;
+				sum[2] += normals[index].z;
+			}
+
+			// Upper left face.
+			if (i - 1 >= 0 && j < m_terrainHeight - 1)
+			{
+				index = j * (m_terrainWidth - 1) + (i - 1);
+
+				sum[0] += normals[index].x;
+				sum[1] += normals[index].y;
+				sum[2] += normals[index].z;
+			}
+
+			// Upper right face.
+			if (i < m_terrainWidth - 1 && j < m_terrainHeight - 1)
+			{
+				index = j * (m_terrainWidth - 1) + i;
+
+				sum[0] += normals[index].x;
+				sum[1] += normals[index].y;
+				sum[2] += normals[index].z;
+			}
+
+			length = (float)sqrt(sum[0] * sum[0] + sum[1] * sum[1] + sum[2] * sum[2]);
+			index = j * m_terrainWidth + i;
+
+			m_heightMap[index].nx = sum[0] / length;
+			m_heightMap[index].ny = sum[1] / length;
+			m_heightMap[index].nz = sum[2] / length;
+		}
+	}
+
+	delete[] normals;
+	normals = NULL;
+
+	return true;
+}
+
 bool TerrainClass::BuildTerrainModel()
 {
 	int i, j, index, index1, index2, index3, index4;
@@ -242,6 +362,9 @@ bool TerrainClass::BuildTerrainModel()
 			m_terrainModel[index].z = m_heightMap[index1].z;
 			m_terrainModel[index].tu = 0.0f;
 			m_terrainModel[index].tv = 0.0f;
+			m_terrainModel[index].nx = m_heightMap[index1].nx;
+			m_terrainModel[index].ny = m_heightMap[index1].ny;
+			m_terrainModel[index].nz = m_heightMap[index1].nz;
 			++index;
 
 			// Triangle 1 - Upper right.
@@ -250,6 +373,9 @@ bool TerrainClass::BuildTerrainModel()
 			m_terrainModel[index].z = m_heightMap[index2].z;
 			m_terrainModel[index].tu = 1.0f;
 			m_terrainModel[index].tv = 0.0f;
+			m_terrainModel[index].nx = m_heightMap[index2].nx;
+			m_terrainModel[index].ny = m_heightMap[index2].ny;
+			m_terrainModel[index].nz = m_heightMap[index2].nz;
 			++index;
 
 			// Triangle 1 - Bottom left.
@@ -258,6 +384,9 @@ bool TerrainClass::BuildTerrainModel()
 			m_terrainModel[index].z = m_heightMap[index3].z;
 			m_terrainModel[index].tu = 0.0f;
 			m_terrainModel[index].tv = 1.0f;
+			m_terrainModel[index].nx = m_heightMap[index3].nx;
+			m_terrainModel[index].ny = m_heightMap[index3].ny;
+			m_terrainModel[index].nz = m_heightMap[index3].nz;
 			++index;
 
 			// Triangle 2 - Bottom left.
@@ -265,6 +394,9 @@ bool TerrainClass::BuildTerrainModel()
 			m_terrainModel[index].y = m_heightMap[index3].y;
 			m_terrainModel[index].z = m_heightMap[index3].z;
 			m_terrainModel[index].tu = 0.0f;
+			m_terrainModel[index].nx = m_heightMap[index3].nx;
+			m_terrainModel[index].ny = m_heightMap[index3].ny;
+			m_terrainModel[index].nz = m_heightMap[index3].nz;
 			m_terrainModel[index].tv = 1.0f;
 			++index;
 
@@ -274,6 +406,9 @@ bool TerrainClass::BuildTerrainModel()
 			m_terrainModel[index].z = m_heightMap[index2].z;
 			m_terrainModel[index].tu = 1.0f;
 			m_terrainModel[index].tv = 0.0f;
+			m_terrainModel[index].nx = m_heightMap[index2].nx;
+			m_terrainModel[index].ny = m_heightMap[index2].ny;
+			m_terrainModel[index].nz = m_heightMap[index2].nz;
 			++index;
 
 			// Triangle 2 - Upper left.
@@ -282,6 +417,9 @@ bool TerrainClass::BuildTerrainModel()
 			m_terrainModel[index].z = m_heightMap[index4].z;
 			m_terrainModel[index].tu = 1.0f;
 			m_terrainModel[index].tv = 1.0f;
+			m_terrainModel[index].nx = m_heightMap[index4].nx;
+			m_terrainModel[index].ny = m_heightMap[index4].ny;
+			m_terrainModel[index].nz = m_heightMap[index4].nz;
 			++index;
 		}
 	}
@@ -328,8 +466,13 @@ bool TerrainClass::InitializeBuffers(ID3D11Device *device)
 		vertices[i].position = XMFLOAT3(m_terrainModel[i].x,
 			m_terrainModel[i].y,
 			m_terrainModel[i].z);
-		//vertices[i].color = color;
+		
 		vertices[i].texture = XMFLOAT2(m_terrainModel[i].tu, m_terrainModel[i].tv);
+
+		vertices[i].normal = XMFLOAT3(m_terrainModel[i].nx,
+			m_terrainModel[i].ny,
+			m_terrainModel[i].nz);
+
 		indices[i] = i;
 	}
 
