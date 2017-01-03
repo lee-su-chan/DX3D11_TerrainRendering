@@ -22,7 +22,7 @@ bool LightShaderClass::Initialize(ID3D11Device *device, HWND hwnd)
 {
 	bool result;
 
-	result = InitializeShader(device, hwnd, L"Ligth.vs", L"Light.ps");
+	result = InitializeShader(device, hwnd, L"Light.vs", L"Light.ps");
 	if (!result)
 		return false;
 
