@@ -51,5 +51,4 @@ F2: 와이어프레임 켜기/끄기  
 ![dirtytexture](https://cloud.githubusercontent.com/assets/13383741/21608702/89807376-d201-11e6-9db3-beb017434a8d.PNG)
 #### *Test Texture*
 ![testtexture](https://cloud.githubusercontent.com/assets/13383741/21609034/7cb7a946-d203-11e6-8cd2-c286baa33ac7.PNG)
-
-
+1. 조명 효과 구현
