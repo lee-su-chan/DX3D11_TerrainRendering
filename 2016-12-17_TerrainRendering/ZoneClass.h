@@ -27,13 +27,15 @@ private:
 	void HandleMovementInput(InputClass *, float);
 	bool Render(D3DClass *, ShaderManagerClass *, TextureManagerClass *);
 
+	void MoveLightDirection(float);
+
 private:
 	UserInterfaceClass *m_UserInterface;
 	CameraClass *m_Camera;
 	LightClass *m_Light;
 	PositionClass *m_Position;
 	TerrainClass *m_Terrain;
-	bool m_displayUI, m_wireFrame;
+	bool m_displayUI, m_wireFrame, m_play;
 };
 
 #endif
