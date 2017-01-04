@@ -251,6 +251,25 @@ bool InputClass::IsF2Toggled()
 	return false;
 }
 
+bool InputClass::IsF3Toggled()
+{
+	if (m_keyboardState[DIK_F3] & 0x80)
+	{
+		if (m_F3_released)
+		{
+			m_F3_released = false;
+
+			return true;
+		}
+	}
+	else
+	{
+		m_F3_released = true;
+	}
+
+	return false;
+}
+
 bool InputClass::ReadKeyboard()
 {
 	HRESULT result;
