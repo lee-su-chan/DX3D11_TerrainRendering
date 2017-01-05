@@ -2,12 +2,12 @@
 
 TerrainShaderClass::TerrainShaderClass()
 {
-	m_vertexShader;
-	m_pixelShader= 0;
-	m_layout= 0;
-	m_matrixBuffer;
-	m_sampleState= 0;
-	m_lightBuffer= 0;
+	m_vertexShader = 0;
+	m_pixelShader = 0;
+	m_layout = 0;
+	m_matrixBuffer = 0;
+	m_sampleState = 0;
+	m_lightBuffer = 0;
 }
 
 TerrainShaderClass::TerrainShaderClass(const TerrainShaderClass &other)
@@ -188,6 +188,7 @@ bool TerrainShaderClass::InitializeShader(ID3D11Device *device,
 	matrixBufferDesc.MiscFlags = 0;
 	matrixBufferDesc.StructureByteStride = 0;
 
+	result = device->CreateBuffer(&matrixBufferDesc, NULL, &m_matrixBuffer);
 	if (FAILED(result))
 		return false;
 
