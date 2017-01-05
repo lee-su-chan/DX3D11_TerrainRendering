@@ -230,7 +230,7 @@ bool ZoneClass::Render(D3DClass *direct3D,
 
 	m_Terrain->Render(direct3D->GetDeviceContext());
 
-	result = shaderManager->RenderLightShader(direct3D->GetDeviceContext(),
+	result = shaderManager->RenderTerrainShader(direct3D->GetDeviceContext(),
 		m_Terrain->GetIndexCount(),
 		worldMatrix,
 		viewMatrix,
