@@ -216,7 +216,7 @@ bool TerrainShaderClass::InitializeShader(ID3D11Device *device,
 	lightBufferDesc.MiscFlags = 0;
 	lightBufferDesc.StructureByteStride = 0;
 
-	result = device->CreateBuffer(&lightBufferDesc, &m_lightBuffer);
+	result = device->CreateBuffer(&lightBufferDesc, NULL, &m_lightBuffer);
 	if (FAILED(result))
 		return false;
 
