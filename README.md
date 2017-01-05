@@ -48,7 +48,12 @@ F2: 와이어프레임 켜기/끄기  
   
 ### 2017-01-03(Tutorial 4 : Terrain Lighting)
 #### *Ground Texture*  
-![dirtytexture](https://cloud.githubusercontent.com/assets/13383741/21608702/89807376-d201-11e6-9db3-beb017434a8d.PNG)
+![1](https://cloud.githubusercontent.com/assets/13383741/21688770/69298b7e-d3b1-11e6-972a-9c0ba21f9257.PNG)
 #### *Test Texture*
 ![testtexture](https://cloud.githubusercontent.com/assets/13383741/21609034/7cb7a946-d203-11e6-8cd2-c286baa33ac7.PNG)
 1. 조명 효과 구현
+
+### 2017-01-05(Tutorial 5 : Color Mapped Terrain)
+#### *Headline*
+![2](https://cloud.githubusercontent.com/assets/13383741/21688771/692b50c6-d3b1-11e6-8b7b-92616636beb7.PNG)
+1. 비트맵 파일을 이용한 색상 맵핑 구현
