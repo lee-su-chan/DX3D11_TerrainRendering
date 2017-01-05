@@ -195,8 +195,7 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 		&m_swapChain,
 		&m_device,
 		NULL,
-		&m_deviceContext
-		);
+		&m_deviceContext);
 
 	if (FAILED(result))
 		return false;
