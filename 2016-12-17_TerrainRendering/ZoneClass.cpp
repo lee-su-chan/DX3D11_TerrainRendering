@@ -236,6 +236,7 @@ bool ZoneClass::Render(D3DClass *direct3D,
 		viewMatrix,
 		projectionMatrix,
 		textureManager->GetTexture(1),
+		textureManager->GetTexture(2),
 		m_Light->GetDirection(),
 		m_Light->GetDiffuseColor());
 
