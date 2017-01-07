@@ -97,6 +97,14 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance,
 	if (!result)
 		return false;
 
+	result = m_TextureManager->LoadTexture(m_Direct3D->GetDevice(),
+		m_Direct3D->GetDeviceContext(),
+		"data/textures/dirt01n.tga",
+		2);
+
+	if (!result)
+		return false;
+
 	m_Timer = new TimerClass;
 	if (!m_Timer)
 		return false;
