@@ -44,6 +44,10 @@ bool TerrainClass::Initialize(ID3D11Device *device, char *setupFilename)
 	if (!result)
 		return false;
 
+	ShutdownHeightMap();
+
+	CalculateTerrainVectors();
+
 	result = InitializeBuffers(device);
 	if (!result)
 		return false;
@@ -538,6 +542,128 @@ void TerrainClass::ShutdownTerrainModel()
 	return;
 }
 
+void TerrainClass::CalculateTerrainVectors()
+{
+	int faceCount, i, index;
+	TempVertexType vertex1, vertex2, vertex3;
+	VectorType tangent, binormal;
+
+	faceCount = m_vertexCount / 3;
+	index = 0;
+
+	for (i = 0; i < faceCount; ++i)
+	{
+		vertex1.x = m_terrainModel[index].x;
+		vertex1.y = m_terrainModel[index].y;
+		vertex1.z = m_terrainModel[index].z;
+		vertex1.tu = m_terrainModel[index].tu;
+		vertex1.tv = m_terrainModel[index].tv;
+		vertex1.nx = m_terrainModel[index].nx;
+		vertex1.ny = m_terrainModel[index].ny;
+		vertex1.nz = m_terrainModel[index].nz;
+		++index;
+
+		vertex2.x = m_terrainModel[index].x;
+		vertex2.y = m_terrainModel[index].y;
+		vertex2.z = m_terrainModel[index].z;
+		vertex2.tu = m_terrainModel[index].tu;
+		vertex2.tv = m_terrainModel[index].tv;
+		vertex2.nx = m_terrainModel[index].nx;
+		vertex2.ny = m_terrainModel[index].ny;
+		vertex2.nz = m_terrainModel[index].nz;
+		++index;
+
+		vertex3.x = m_terrainModel[index].x;
+		vertex3.y = m_terrainModel[index].y;
+		vertex3.z = m_terrainModel[index].z;
+		vertex3.tu = m_terrainModel[index].tu;
+		vertex3.tv = m_terrainModel[index].tv;
+		vertex3.nx = m_terrainModel[index].nx;
+		vertex3.ny = m_terrainModel[index].ny;
+		vertex3.nz = m_terrainModel[index].nz;
+		++index;
+
+		CalculateTangentBinormal(vertex1, vertex2, vertex3, tangent, binormal);
+
+		m_terrainModel[index - 1].tx = tangent.x;
+		m_terrainModel[index - 1].ty = tangent.y;
+		m_terrainModel[index - 1].tz = tangent.z;
+		m_terrainModel[index - 1].bx = tangent.x;
+		m_terrainModel[index - 1].by = tangent.y;
+		m_terrainModel[index - 1].bz = tangent.z;
+
+		m_terrainModel[index - 2].tx = tangent.x;
+		m_terrainModel[index - 2].ty = tangent.y;
+		m_terrainModel[index - 2].tz = tangent.z;
+		m_terrainModel[index - 2].bx = tangent.x;
+		m_terrainModel[index - 2].by = tangent.y;
+		m_terrainModel[index - 2].bz = tangent.z;
+
+		m_terrainModel[index - 3].tx = tangent.x;
+		m_terrainModel[index - 3].ty = tangent.y;
+		m_terrainModel[index - 3].tz = tangent.z;
+		m_terrainModel[index - 3].bx = tangent.x;
+		m_terrainModel[index - 3].by = tangent.y;
+		m_terrainModel[index - 3].bz = tangent.z;
+	}
+
+	return;
+}
+
+void TerrainClass::CalculateTangentBinormal(TempVertexType vertex1,
+	TempVertexType vertex2,
+	TempVertexType vertex3,
+	VectorType &tangent,
+	VectorType &binormal)
+{
+	float vector1[3], vector2[3];
+	float tuVector[2], tvVector[2];
+	float den;
+	float length;
+
+	vector1[0] = vertex2.x - vertex1.x;
+	vector1[1] = vertex2.y - vertex1.y;
+	vector1[2] = vertex2.z - vertex1.z;
+
+	vector2[0] = vertex3.x - vertex1.x;
+	vector2[1] = vertex3.y - vertex1.y;
+	vector2[2] = vertex3.z - vertex1.z;
+
+	tvVector[0] = vertex2.tu - vertex1.tu;
+	tvVector[0] = vertex2.tv - vertex1.tv;
+
+	tvVector[1] = vertex3.tu - vertex1.tu;
+	tvVector[1] = vertex3.tv - vertex1.tv;
+
+	den = 1.0f / (tuVector[0] * tvVector[1] - tuVector[1] * tvVector[0]);
+
+	tangent.x = (tvVector[1] * vector1[0] - tvVector[0] * vector2[0]) * den;
+	tangent.y = (tvVector[1] * vector1[1] - tvVector[0] * vector2[1]) * den;
+	tangent.z = (tvVector[1] * vector1[2] - tvVector[0] * vector2[2]) * den;
+
+	binormal.x = (tuVector[0] * vector2[0] - tuVector[1] * vector1[0]) * den;
+	binormal.y = (tuVector[0] * vector2[1] - tuVector[1] * vector1[1]) * den;
+	binormal.z = (tuVector[0] * vector2[2] - tuVector[1] * vector1[2]) * den;
+
+	length = (float)sqrt(tangent.x * tangent.x +
+		tangent.y * tangent.y +
+		tangent.z * tangent.z);
+
+	tangent.x = tangent.x / length;
+	tangent.y = tangent.y / length;
+	tangent.z = tangent.z / length;
+
+	length = (float)sqrt(binormal.x * binormal.x +
+		binormal.y * binormal.y +
+		binormal.z * binormal.z);
+
+	binormal.x = binormal.x / length;
+	binormal.y = binormal.y / length;
+	binormal.z = binormal.z / length;
+
+	return;
+}
+
 bool TerrainClass::InitializeBuffers(ID3D11Device *device)
 {
 	VertexType *vertices;
@@ -573,6 +699,14 @@ bool TerrainClass::InitializeBuffers(ID3D11Device *device)
 		vertices[i].normal = XMFLOAT3(m_terrainModel[i].nx,
 			m_terrainModel[i].ny,
 			m_terrainModel[i].nz);
+
+		vertices[i].tangent = XMFLOAT3(m_terrainModel[i].tx,
+			m_terrainModel[i].ty, 
+			m_terrainModel[i].tz);
+
+		vertices[i].binormal = XMFLOAT3(m_terrainModel[i].bx,
+			m_terrainModel[i].by,
+			m_terrainModel[i].bz);
 
 		vertices[i].color = XMFLOAT3(m_terrainModel[i].r,
 			m_terrainModel[i].g,
