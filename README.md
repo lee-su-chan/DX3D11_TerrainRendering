@@ -57,3 +57,28 @@ F2: 와이어프레임 켜기/끄기  
 #### *Headline*
 ![2](https://cloud.githubusercontent.com/assets/13383741/21688771/692b50c6-d3b1-11e6-8b7b-92616636beb7.PNG)
 1. 비트맵 파일을 이용한 색상 맵핑 구현
+
+### 2017-01-07(Tutorial 6 : Terrain Normal Mapping)
+-이번 단계는 가까이서만 확인할 수 있으므로 헤드라인 사진은 없습니다.
+#### *Texture X, ColorMapping X*
+![no texture colormapping](https://cloud.githubusercontent.com/assets/13383741/21742300/08996e26-d52f-11e6-9020-1ab6aea3890e.PNG)
+#### *Texture O, ColorMppaing X*
+![have texture no colormapping](https://cloud.githubusercontent.com/assets/13383741/21742301/08c468ec-d52f-11e6-983e-dce4673c890a.PNG)
+#### *Texture O, ColorMppaing O*
+![have texture colormapping](https://cloud.githubusercontent.com/assets/13383741/21742302/08ecdee4-d52f-11e6-8670-fd7ead45d656.PNG)
+1. 지형 노말 맵핑 구현  
+2. 이제부터 한 단계가 끝나면 제 생각을 쓸 것입니다.  
+
+#### My Thinks  
+이번 단계에선 노말 맵핑이라는 것을 배웠다.
+내가 정확히 이해했는지는 모르겠지만 아마 한 텍스쳐를 위한 NormalMap 텍스쳐가 준비되어야 하는 것 같다.
+그리고 노말 맵핑이란 NormalMap 텍스쳐를 이용하여 법선이란 의미의 Tangent와
+종법선이란 의미의 Binormal을 이용하여 지형의 한 픽셀마다의 조명 정보를 얻어 렌더링 하는 기법인 것 같다.
+
+전 단계에선 지형에 가까이 가면 뭉개진 느낌이 났는데 이번 단계에서 노말 맵핑을 하고 나니
+눈에 잘 띄지는 않아도 가까이 가면 그 형태가 온전히 이루어져 있는것이 보여졌다.
+
+정말 DirectX는 내가 무엇을 상상하든 그 이상을 보여주는 것 같다. 그래서 하면 할수록 재밌다.
+HeightBitmap을 가지고 지형을 만들었을 때나 텍스쳐를 입히고 조명을 주고 컬러 맵핑을 했을때나
+하나 같이 마지막에 실행을 했을땐 항상 감탄했었다.
+앞으로 더 해야할 단계들이 남았지만 실행창을 보았을때의 느낌은 무뎌지지 않을 것 같다.
