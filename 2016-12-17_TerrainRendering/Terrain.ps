@@ -34,7 +34,7 @@ float4 TerrainPixelShader(PixelInputType input) : SV_TARGET
 
 	lightDir = -lightDirection;
 
-	bumpMap = normalTexture.(SampleType, input.tex);
+	bumpMap = normalTexture.Sample(SampleType, input.tex);
 	bumpMap = (bumpMap * 2.0f) - 1.0f;
 	bumpNormal = bumpMap.x * input.tangent + bumpMap.y * input.binormal + bumpMap.z * input.normal;
 	bumpNormal = normalize(bumpNormal);
