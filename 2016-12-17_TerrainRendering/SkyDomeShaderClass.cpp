@@ -2,11 +2,11 @@
 
 SkyDomeShaderClass::SkyDomeShaderClass()
 {
-	m_vertexShader= 0;
-	m_pixelShader= 0;
-	m_layout= 0;
-	m_matrixBuffer= 0;
-	m_colorBuffer= 0;
+	m_vertexShader = 0;
+	m_pixelShader = 0;
+	m_layout = 0;
+	m_matrixBuffer = 0;
+	m_colorBuffer = 0;
 }
 
 SkyDomeShaderClass::SkyDomeShaderClass(const SkyDomeShaderClass &other)
