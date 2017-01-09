@@ -10,6 +10,7 @@
 #include "CameraClass.h"
 #include "LightClass.h"
 #include "PositionClass.h"
+#include "SkyDomeClass.h"
 #include "TerrainClass.h"
 
 class ZoneClass
@@ -34,6 +35,7 @@ private:
 	CameraClass *m_Camera;
 	LightClass *m_Light;
 	PositionClass *m_Position;
+	SkyDomeClass *m_SkyDome;
 	TerrainClass *m_Terrain;
 	bool m_displayUI, m_wireFrame, m_play;
 };

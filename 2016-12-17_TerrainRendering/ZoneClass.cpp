@@ -6,6 +6,7 @@ ZoneClass::ZoneClass()
 	m_Camera = 0;
 	m_Light = 0;
 	m_Position = 0;
+	m_SkyDome = 0;
 	m_Terrain = 0;
 }
 
@@ -60,6 +61,18 @@ bool ZoneClass::Initialize(D3DClass *direct3D,
 	m_Position->SetPosition(128.0f, 100.0f, -150.0f);
 	m_Position->SetRotation(19.0f, 0.0f, 0.0f);
 
+	m_SkyDome = new SkyDomeClass;
+	if (!m_SkyDome)
+		return false;
+
+	result = m_SkyDome->Initialize(direct3D->GetDevice());
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the sky dome object.", L"Error", MB_OK);
+
+		return false;
+	}
+
 	m_Terrain = new TerrainClass;
 	if (!m_Terrain)
 		return false;
@@ -86,6 +99,13 @@ void ZoneClass::Shutdown()
 		m_Terrain->Shutdown();
 		delete m_Terrain;
 		m_Terrain = NULL;
+	}
+
+	if (m_SkyDome)
+	{
+		m_SkyDome->Shutdown();
+		delete m_SkyDome;
+		m_SkyDome = NULL;
 	}
 
 	if (m_Position)
@@ -214,6 +234,7 @@ bool ZoneClass::Render(D3DClass *direct3D,
 {
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrix, orthoMatrix;
 	bool result;
+	XMFLOAT3 cameraPosition;
 
 	m_Camera->Render();
 
@@ -223,7 +244,32 @@ bool ZoneClass::Render(D3DClass *direct3D,
 	m_Camera->GetBaseViewMatrix(baseViewMatrix);
 	direct3D->GetOrthoMatrix(orthoMatrix);
 
+	cameraPosition = m_Camera->GetPosition();
+
 	direct3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
+
+	direct3D->TurnOffCulling();
+	direct3D->TurnZBufferOff();
+
+	worldMatrix = XMMatrixTranslation(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+
+	m_SkyDome->Render(direct3D->GetDeviceContext());
+	
+	result = shaderManager->RenderSkyDomeShader(direct3D->GetDeviceContext(),
+		m_SkyDome->GetIndexCount(),
+		worldMatrix,
+		viewMatrix,
+		projectionMatrix,
+		m_SkyDome->GetApexColor(),
+		m_SkyDome->GetCenterColor());
+
+	if (!result)
+		return false;
+
+	direct3D->GetWorldMatrix(worldMatrix);
+	
+	direct3D->TurnZBufferOn();
+	direct3D->TurnOnCulling();
 
 	if (m_wireFrame)
 		direct3D->EnableWireframe();
