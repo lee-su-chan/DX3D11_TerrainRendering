@@ -17,7 +17,7 @@ struct PixelInputType
 };
 
 
-PixelinputType SkeDomeVertexShader(VertexInputType input)
+PixelInputType SkyDomeVertexShader(VertexInputType input)
 {
 	PixelInputType output;
 
