@@ -52,14 +52,15 @@ bool ZoneClass::Initialize(D3DClass *direct3D,
 
 	m_Light->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_Light->SetDirection(-0.5f, -1.0f, -0.5f);
-	//m_Light->SetDirection(0.0f, -1.0f, 0.0f);
 
 	m_Position = new PositionClass;
 	if (!m_Position)
 		return false;
 
-	m_Position->SetPosition(128.0f, 100.0f, -150.0f);
-	m_Position->SetRotation(19.0f, 0.0f, 0.0f);
+	//m_Position->SetPosition(128.0f, 100.0f, -150.0f);
+	//m_Position->SetRotation(19.0f, 0.0f, 0.0f);
+	m_Position->SetPosition(128.0f, 1.0f, 0.0f);
+	m_Position->SetRotation(0.0f, 0.0f, 0.0f);
 
 	m_SkyDome = new SkyDomeClass;
 	if (!m_SkyDome)
@@ -152,7 +153,7 @@ bool ZoneClass::Frame(D3DClass *direct3D,
 	m_Position->GetRotation(rotX, rotY, rotZ);
 
 	if(m_play)
-		MoveLightDirection(frameTime);
+		PushedF3Button(frameTime);
 	
 	result = m_UserInterface->Frame(direct3D->GetDeviceContext(),
 		fps,
@@ -161,7 +162,9 @@ bool ZoneClass::Frame(D3DClass *direct3D,
 		posZ,
 		rotX,
 		rotY,
-		rotZ);
+		rotZ,
+		m_SkyDome->GetApexColor(),
+		m_SkyDome->GetCenterColor());
 	
 	if (!result)
 		return false;
@@ -310,19 +313,29 @@ bool ZoneClass::Render(D3DClass *direct3D,
 }
 
 // 0 - 257 : 129
-void ZoneClass::MoveLightDirection(float frameTime)
+void ZoneClass::PushedF3Button(float frameTime)
 {
-	XMFLOAT3 dir;
-
-	dir = m_Light->GetDirection();
-
-	if (dir.x >= 360) dir.x -= 360;
-	if (dir.y >= 360) dir.y -= 360;
-	if (dir.z >= 360) dir.z -= 360;
+	//XMFLOAT3 dir;
+	//
+	//dir = m_Light->GetDirection();
+	//
+	//if (dir.x >= 360) dir.x -= 360;
+	//if (dir.y >= 360) dir.y -= 360;
+	//if (dir.z >= 360) dir.z -= 360;
+	//
+	//dir.x += frameTime / 5;
+	//
+	//m_Light->SetDirection(dir.x, dir.y, dir.z);
 	
-	dir.x += frameTime / 5;
+	XMFLOAT4 tempColor;
 
-	m_Light->SetDirection(dir.x, dir.y, dir.z);
-	
+	tempColor = m_SkyDome->GetApexColor();
+
+	tempColor.x -= frameTime / 10; // R
+	tempColor.y -= frameTime / 10; // G
+	tempColor.z -= frameTime / 10; // B
+
+	m_SkyDome->SetApexColor(tempColor);
+
 	return;
 }

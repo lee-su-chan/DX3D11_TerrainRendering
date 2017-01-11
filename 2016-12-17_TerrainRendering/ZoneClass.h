@@ -28,7 +28,7 @@ private:
 	void HandleMovementInput(InputClass *, float);
 	bool Render(D3DClass *, ShaderManagerClass *, TextureManagerClass *);
 
-	void MoveLightDirection(float);
+	void PushedF3Button(float);
 
 private:
 	UserInterfaceClass *m_UserInterface;
