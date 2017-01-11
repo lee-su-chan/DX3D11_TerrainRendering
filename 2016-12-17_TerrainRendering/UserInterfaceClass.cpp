@@ -6,6 +6,7 @@ UserInterfaceClass::UserInterfaceClass()
 	m_fpsString = 0;
 	m_videoStrings = 0;
 	m_positionStrings = 0;
+	m_skyColorStrings = 0;
 }
 
 UserInterfaceClass::UserInterfaceClass(const UserInterfaceClass &other)
@@ -16,7 +17,9 @@ UserInterfaceClass::~UserInterfaceClass()
 {
 }
 
-bool UserInterfaceClass::Initialize(D3DClass *Direct3D, int screenHeight, int screenWidth)
+bool UserInterfaceClass::Initialize(D3DClass *Direct3D, 
+	int screenHeight, 
+	int screenWidth)
 {
 	bool result;
 	char videoCard[128];
@@ -220,6 +223,188 @@ bool UserInterfaceClass::Initialize(D3DClass *Direct3D, int screenHeight, int sc
 	for (i = 0; i < 6; ++i)
 		m_previousPosition[i] = -1;
 
+	m_skyColorTypeStrings = new TextClass[2];
+	if (!m_skyColorTypeStrings)
+		return false;
+
+	result = m_skyColorTypeStrings[0].Initialize(Direct3D->GetDevice(),
+		Direct3D->GetDeviceContext(),
+		screenWidth,
+		screenHeight,
+		16,
+		false,
+		m_font1,
+		"ApexColor",
+		10,
+		-270,
+		1.0f,
+		1.0f,
+		1.0f);
+
+	if (!result)
+		return false;
+
+	result = m_skyColorTypeStrings[1].Initialize(Direct3D->GetDevice(),
+		Direct3D->GetDeviceContext(),
+		screenWidth,
+		screenHeight,
+		16,
+		false,
+		m_font1,
+		"CenterColor",
+		10,
+		-380,
+		1.0f,
+		1.0f,
+		1.0f);
+
+	if (!result)
+		return false;
+
+	m_skyColorStrings = new TextClass[8];
+	if (!m_skyColorStrings)
+		return false;
+
+	result = m_skyColorStrings[0].Initialize(Direct3D->GetDevice(),
+		Direct3D->GetDeviceContext(),
+		screenWidth,
+		screenHeight,
+		16,
+		false,
+		m_font1,
+		"R: 0",
+		10,
+		-290,
+		1.0f,
+		1.0f,
+		1.0f);
+
+	if (!result)
+		return false;
+
+	result = m_skyColorStrings[1].Initialize(Direct3D->GetDevice(),
+		Direct3D->GetDeviceContext(),
+		screenWidth,
+		screenHeight,
+		16,
+		false,
+		m_font1,
+		"G: 0",
+		10,
+		-310,
+		1.0f,
+		1.0f,
+		1.0f);
+
+	if (!result)
+		return false;
+
+
+	result = m_skyColorStrings[2].Initialize(Direct3D->GetDevice(),
+		Direct3D->GetDeviceContext(),
+		screenWidth,
+		screenHeight,
+		16,
+		false,
+		m_font1,
+		"B: 0",
+		10,
+		-330,
+		1.0f,
+		1.0f,
+		1.0f);
+
+	if (!result)
+		return false;
+
+	result = m_skyColorStrings[3].Initialize(Direct3D->GetDevice(),
+		Direct3D->GetDeviceContext(),
+		screenWidth,
+		screenHeight,
+		16,
+		false,
+		m_font1,
+		"A: 0",
+		10,
+		-350,
+		1.0f,
+		1.0f,
+		1.0f);
+
+	if (!result)
+		return false;
+
+	result = m_skyColorStrings[4].Initialize(Direct3D->GetDevice(),
+		Direct3D->GetDeviceContext(),
+		screenWidth,
+		screenHeight,
+		16,
+		false,
+		m_font1,
+		"R: 0",
+		10,
+		-400,
+		1.0f,
+		1.0f,
+		1.0f);
+
+	if (!result)
+		return false;
+
+	result = m_skyColorStrings[5].Initialize(Direct3D->GetDevice(),
+		Direct3D->GetDeviceContext(),
+		screenWidth,
+		screenHeight,
+		16,
+		false,
+		m_font1,
+		"G: 0",
+		10,
+		-420,
+		1.0f,
+		1.0f,
+		1.0f);
+
+	if (!result)
+		return false;
+
+	result = m_skyColorStrings[6].Initialize(Direct3D->GetDevice(),
+		Direct3D->GetDeviceContext(),
+		screenWidth,
+		screenHeight,
+		16,
+		false,
+		m_font1,
+		"B: 0",
+		10,
+		-440,
+		1.0f,
+		1.0f,
+		1.0f);
+
+	if (!result)
+		return false;
+
+	result = m_skyColorStrings[7].Initialize(Direct3D->GetDevice(),
+		Direct3D->GetDeviceContext(),
+		screenWidth,
+		screenHeight,
+		16,
+		false,
+		m_font1,
+		"A: 0",
+		10,
+		-460,
+		1.0f,
+		1.0f,
+		1.0f);
+
+	if (!result)
+		return false;
+
+	for (i = 0; i < 8; ++i)
+		m_previousSkyColor[i] = -1;
+
 	return true;
 }
 
@@ -236,6 +421,30 @@ void UserInterfaceClass::Shutdown()
 
 		delete[] m_positionStrings;
 		m_positionStrings = NULL;
+	}
+
+	if (m_skyColorStrings)
+	{
+		m_skyColorStrings[0].Shutdown();
+		m_skyColorStrings[1].Shutdown();
+		m_skyColorStrings[2].Shutdown();
+		m_skyColorStrings[3].Shutdown();
+		m_skyColorStrings[4].Shutdown();
+		m_skyColorStrings[5].Shutdown();
+		m_skyColorStrings[6].Shutdown();
+		m_skyColorStrings[7].Shutdown();
+
+		delete[] m_skyColorStrings;
+		m_skyColorStrings = NULL;
+	}
+
+	if (m_skyColorTypeStrings)
+	{
+		m_skyColorTypeStrings[0].Shutdown();
+		m_skyColorTypeStrings[1].Shutdown();
+
+		delete[] m_skyColorTypeStrings;
+		m_skyColorTypeStrings = NULL;
 	}
 
 	if (m_videoStrings)
@@ -271,7 +480,9 @@ bool UserInterfaceClass::Frame(ID3D11DeviceContext *deviceContext,
 	float posZ,
 	float rotX,
 	float rotY,
-	float rotZ)
+	float rotZ,
+	XMFLOAT4 apexColor,
+	XMFLOAT4 centerColor)
 {
 	bool result;
 
@@ -286,6 +497,13 @@ bool UserInterfaceClass::Frame(ID3D11DeviceContext *deviceContext,
 		rotX,
 		rotY,
 		rotZ);
+
+	if (!result)
+		return false;
+
+	result = UpdateSkyColorStrings(deviceContext,
+		apexColor,
+		centerColor);
 
 	if (!result)
 		return false;
@@ -317,7 +535,6 @@ bool UserInterfaceClass::Render(D3DClass *Direct3D,
 		viewMatrix,
 		orthoMatrix,
 		m_font1->GetTexture());
-	
 	m_videoStrings[1].Render(Direct3D->GetDeviceContext(),
 		shaderManager,
 		worldMatrix,
@@ -327,6 +544,27 @@ bool UserInterfaceClass::Render(D3DClass *Direct3D,
 
 	for (i = 0; i < 6; ++i)
 		m_positionStrings[i].Render(Direct3D->GetDeviceContext(),
+			shaderManager,
+			worldMatrix,
+			viewMatrix,
+			orthoMatrix,
+			m_font1->GetTexture());
+
+	m_skyColorTypeStrings[0].Render(Direct3D->GetDeviceContext(),
+		shaderManager,
+		worldMatrix,
+		viewMatrix,
+		orthoMatrix,
+		m_font1->GetTexture());
+	m_skyColorTypeStrings[1].Render(Direct3D->GetDeviceContext(),
+		shaderManager,
+		worldMatrix,
+		viewMatrix,
+		orthoMatrix,
+		m_font1->GetTexture());
+
+	for (i = 0; i < 8; ++i)
+		m_skyColorStrings[i].Render(Direct3D->GetDeviceContext(),
 			shaderManager,
 			worldMatrix,
 			viewMatrix,
@@ -506,7 +744,7 @@ bool UserInterfaceClass::UpdatePositionStrings(ID3D11DeviceContext *deviceContex
 	}
 	if (rotationZ != m_previousPosition[5])
 	{
-		m_previousPosition[5] = rotationX;
+		m_previousPosition[5] = rotationZ;
 		_itoa_s(rotationZ, tempString, 10);
 		strcpy_s(finalString, "rZ: ");
 		strcat_s(finalString, tempString);
@@ -515,6 +753,175 @@ bool UserInterfaceClass::UpdatePositionStrings(ID3D11DeviceContext *deviceContex
 			finalString,
 			10,
 			-220,
+			1.0f,
+			1.0f,
+			1.0f);
+
+		if (!result)
+			return false;
+	}
+
+	return true;
+}
+
+bool UserInterfaceClass::UpdateSkyColorStrings(ID3D11DeviceContext *deviceContext, 
+	XMFLOAT4 apexColor,
+	XMFLOAT4 centerColor)
+{
+	float apexR, apexG, apexB, apexA;
+	float centerR, centerG, centerB, centerA;
+	char tempString[16];
+	char finalString[16];
+	bool result;
+
+	apexR = apexColor.x;
+	apexG = apexColor.y;
+	apexB = apexColor.z;
+	apexA = apexColor.w;
+
+	centerR = centerColor.x;
+	centerG = centerColor.y;
+	centerB = centerColor.z;
+	centerA = centerColor.w;
+
+	if (apexR != m_previousSkyColor[0])
+	{
+		m_previousSkyColor[0] = apexR;
+		sprintf_s(tempString, "%.3f", apexR);
+		strcpy_s(finalString, "R: ");
+		strcat_s(finalString, tempString);
+		result = m_skyColorStrings[0].UpdateSentence(deviceContext,
+			m_font1,
+			finalString,
+			10,
+			-290,
+			1.0f,
+			1.0f,
+			1.0f);
+
+		if (!result)
+			return false;
+	}
+	if (apexG != m_previousSkyColor[1])
+	{
+		m_previousSkyColor[1] = apexG;
+		sprintf_s(tempString, "%.3f", apexG);
+		strcpy_s(finalString, "G: ");
+		strcat_s(finalString, tempString);
+		result = m_skyColorStrings[1].UpdateSentence(deviceContext,
+			m_font1,
+			finalString,
+			10,
+			-310,
+			1.0f,
+			1.0f,
+			1.0f);
+
+		if (!result)
+			return false;
+	}
+	if (apexB != m_previousSkyColor[2])
+	{
+		m_previousSkyColor[2] = apexB;
+		sprintf_s(tempString, "%.3f", apexB);
+		strcpy_s(finalString, "B: ");
+		strcat_s(finalString, tempString);
+		result = m_skyColorStrings[2].UpdateSentence(deviceContext,
+			m_font1,
+			finalString,
+			10,
+			-330,
+			1.0f,
+			1.0f,
+			1.0f);
+
+		if (!result)
+			return false;
+	}
+	if (apexA != m_previousSkyColor[3])
+	{
+		m_previousSkyColor[3] = apexA;
+		sprintf_s(tempString, "%.3f", apexA);
+		strcpy_s(finalString, "A: ");
+		strcat_s(finalString, tempString);
+		result = m_skyColorStrings[3].UpdateSentence(deviceContext,
+			m_font1,
+			finalString,
+			10,
+			-350,
+			1.0f,
+			1.0f,
+			1.0f);
+
+		if (!result)
+			return false;
+	}
+
+	if (centerR != m_previousSkyColor[4])
+	{
+		m_previousSkyColor[4] = centerR;
+		sprintf_s(tempString, "%.3f", centerR);
+		strcpy_s(finalString, "R: ");
+		strcat_s(finalString, tempString);
+		result = m_skyColorStrings[4].UpdateSentence(deviceContext,
+			m_font1,
+			finalString,
+			10,
+			-400,
+			1.0f,
+			1.0f,
+			1.0f);
+
+		if (!result)
+			return false;
+	}
+	if (centerG != m_previousSkyColor[5])
+	{
+		m_previousSkyColor[5] = centerG;
+		sprintf_s(tempString, "%.3f", centerG);
+		strcpy_s(finalString, "G: ");
+		strcat_s(finalString, tempString);
+		result = m_skyColorStrings[5].UpdateSentence(deviceContext,
+			m_font1,
+			finalString,
+			10,
+			-420,
+			1.0f,
+			1.0f,
+			1.0f);
+
+		if (!result)
+			return false;
+	}
+	if (centerB != m_previousSkyColor[6])
+	{
+		m_previousSkyColor[6] = centerB;
+		sprintf_s(tempString, "%.3f", centerB);
+		strcpy_s(finalString, "B: ");
+		strcat_s(finalString, tempString);
+		result = m_skyColorStrings[6].UpdateSentence(deviceContext,
+			m_font1,
+			finalString,
+			10,
+			-440,
+			1.0f,
+			1.0f,
+			1.0f);
+
+		if (!result)
+			return false;
+	}
+	if (centerA != m_previousSkyColor[7])
+	{
+		m_previousSkyColor[7] = centerA;
+		sprintf_s(tempString, "%.3f", centerA);
+		strcpy_s(finalString, "A: ");
+		strcat_s(finalString, tempString);
+		result = m_skyColorStrings[7].UpdateSentence(deviceContext,
+			m_font1,
+			finalString,
+			10,
+			-460,
 			1.0f,
 			1.0f,
 			1.0f);
