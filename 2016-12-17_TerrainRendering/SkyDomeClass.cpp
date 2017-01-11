@@ -27,8 +27,8 @@ bool SkyDomeClass::Initialize(ID3D11Device *device)
 	if (!result)
 		return false;
 
-	m_apexColor = XMFLOAT4(0.0f, 0.05f, 0.6f, 1.0f);
-	m_centerColor = XMFLOAT4(0.0f, 0.5f, 0.8f, 1.0f);
+	m_apexColor = XMFLOAT4(0.05f, 0.9f, 0.95f, 1.0f);
+	m_centerColor = XMFLOAT4(0.0f, 0.0f, 0.5f, 1.0f);
 
 	return true;
 }
@@ -61,6 +61,20 @@ XMFLOAT4 SkyDomeClass::GetApexColor()
 XMFLOAT4 SkyDomeClass::GetCenterColor()
 {
 	return m_centerColor;
+}
+
+void SkyDomeClass::SetApexColor(XMFLOAT4 apexColor)
+{
+	m_apexColor = apexColor;
+
+	return;
+}
+
+void SkyDomeClass::SetCenterColor(XMFLOAT4 centerColor)
+{
+	m_centerColor = centerColor;
+
+	return;
 }
 
 bool SkyDomeClass::LoadSkyDomeModel(char *filename)
