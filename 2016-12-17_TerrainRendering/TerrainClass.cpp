@@ -26,7 +26,7 @@ bool TerrainClass::Initialize(ID3D11Device *device, char *setupFilename)
 	if (!result)
 		return false;
 
-	result = LoadBitmapHeightMap();
+	result = LoadRawHeightMap();
 	if (!result)
 		return false;
 
@@ -195,6 +195,54 @@ bool TerrainClass::LoadBitmapHeightMap()
 
 	delete[] bitmapImage;
 	bitmapImage = NULL;
+
+	delete[] m_terrainFilename;
+	m_terrainFilename = NULL;
+
+	return true;
+}
+
+bool TerrainClass::LoadRawHeightMap()
+{
+	int error, i, j, index;
+	FILE *filePtr;
+	unsigned long long imageSize, count;
+	unsigned short *rawImage;
+
+	m_heightMap = new HeightMapType[m_terrainWidth * m_terrainHeight];
+	if (!m_heightMap)
+		return false;
+
+	error = fopen_s(&filePtr, m_terrainFilename, "rb");
+	if (error != 0)
+		return false;
+
+	imageSize = m_terrainHeight * m_terrainWidth;
+
+	rawImage = new unsigned short[imageSize];
+	if (!rawImage)
+		return false;
+
+	count = fread(rawImage, sizeof(unsigned short), imageSize, filePtr);
+	if (!count)
+		return false;
+
+	error = fclose(filePtr);
+	if (error != 0)
+		return false;
+
+	for (j = 0; j < m_terrainHeight; ++j)
+	{
+		for (i = 0; i < m_terrainWidth; ++i)
+		{
+			index = m_terrainWidth * j + i;
+
+			m_heightMap[index].y = (float)rawImage[index];
+		}
+	}
+
+	delete[] rawImage;
+	rawImage = NULL;
 
 	delete[] m_terrainFilename;
 	m_terrainFilename = NULL;
