@@ -68,7 +68,7 @@ F3: 상호작용 재생 켜기/끄기
 #### *Texture O, ColorMppaing O*
 ![have texture colormapping](https://cloud.githubusercontent.com/assets/13383741/21742302/08ecdee4-d52f-11e6-8670-fd7ead45d656.PNG)
 1. 지형 노말 맵핑 구현  
-2. 이제부터 한 단계가 끝나면 제 생각을 쓸 것입니다.  
+2. 이제부터 한 단계가 끝나면 개발자 노트를 쓸 것입니다.  
 
 #### My Thinks  
 이번 단계에선 노말 맵핑이라는 것을 배웠다.
@@ -84,14 +84,14 @@ HeightBitmap을 가지고 지형을 만들었을 때나 텍스쳐를 입히고 �
 하나 같이 마지막에 실행을 했을땐 항상 감탄했었다.
 앞으로 더 해야할 단계들이 남았지만 실행창을 보았을때의 느낌은 무뎌지지 않을 것 같다.
 
-### 2017-01-09(Tutorial 7 :Sky Domes)
+### 2017-01-09(Tutorial 7 : Sky Domes)
 #### *Headline*
 ![1](https://cloud.githubusercontent.com/assets/13383741/21773265/bfc222ac-d6d1-11e6-8952-efec542a2681.PNG)
 #### *LookAtSky*
 ![2](https://cloud.githubusercontent.com/assets/13383741/21773266/bfe9d22a-d6d1-11e6-8e98-e698e427ce13.PNG)
 1. 스카이돔 렌더링 구현
 
-#### My Thicks
+#### Developer Notes
 이번 단계에서는 하늘을 그렸다.  
 스카이돔의 여러 정보를 가지고있는 txt파일을 읽어들여서 데이터를 입력했는데  
 rasterTek은 Maya를 이용하여 obj형식의 모델을 만들었다고 한다.  
@@ -110,10 +110,34 @@ rasterTek은 Maya를 이용하여 obj형식의 모델을 만들었다고 한다.
 ![1](https://cloud.githubusercontent.com/assets/13383741/21847840/5dc60d86-d841-11e6-8fdf-3d0c3fe34b81.PNG)
 1. ApexColor, CenterColor 수치 확인을 위한 인터페이스 구현
 
-#### My Thicks
+#### Developer Notes
 오늘은 UI추가를 했는데 기존에 있던 코드들이 어떻게 돌아가는지  
 확실하게 이해하는데에는 스스로가 무언가를 생각해서 그걸 직접  
 구현 해보는게 좋고 구현 능력도 느는 것 같다.  
   
 새로 만든 인터페이스 덕에 앞으로의 실시간 하늘색 변경 구현을  
 좀더 편하게 개발할 수 있을 것이다.  
+
+### 2017-01-12(Tutorial 8 : Raw Height Maps)
+#### *Headline*
+![2](https://cloud.githubusercontent.com/assets/13383741/21894200/a4660ab2-d921-11e6-8423-e0afc9e71251.PNG)
+#### *Topview*
+![3](https://cloud.githubusercontent.com/assets/13383741/21894202/a4922b4c-d921-11e6-9491-5056c224f3b5.PNG)
+1.  16비트 RAW파일을 이용한 지형 렌더링 구현(세부적인 높이 조절)   
+
+#### Developer Notes
+오늘은 새로운 Colormap.bmp파일과 Heightmap.r16파일을 이용하여  
+전보다 더 세부적인 지형을 렌더링 하였다.  
+  
+기존에 있던 Setup.txt의 지형 가로 세로 수치들이 255에서 1025로 증가하였고  
+스케일링의 수치도 12.0에서 300.0으로 증가하였다.  
+  
+이제는 Heightmap파일로 비트맵 형식은 최대 범위는 2의 8승이였다면  
+Raw16 형식은 2의 16승까지 가능함으로 매우 세부적인 높이 묘사가 가능한 것 같다.  
+Colormap파일도 Heightmap파일과 같이 더 세부적인 정보를 가지고 있는 파일로 바꾸었다.  
+  
+Heightmap파일과 Colormap파일의 용량들이 193KB에서 각각 2MB, 3MB로 바뀐걸 보면  
+이전과는 비교할 수 없을만큼의 데이터들이 있는 듯 하다.  
+  
+그리고 이번 단계부터 렌더링양이 방대하게 많아져서 FPS가 많이 떨어지기 때문에  
+외장그래픽을 잡지 못하는 버그를 고쳐야 할 것 같다.  
