@@ -27,8 +27,8 @@ bool SkyDomeClass::Initialize(ID3D11Device *device)
 	if (!result)
 		return false;
 
-	m_apexColor = XMFLOAT4(0.05f, 0.9f, 0.95f, 1.0f);
-	m_centerColor = XMFLOAT4(0.0f, 0.0f, 0.5f, 1.0f);
+	m_apexColor = XMFLOAT4(0.0f, 0.0f, 0.5f, 1.0f);
+	m_centerColor = XMFLOAT4(0.05f, 0.5f, 0.95f, 1.0f);
 
 	return true;
 }
