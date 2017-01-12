@@ -57,10 +57,13 @@ bool ZoneClass::Initialize(D3DClass *direct3D,
 	if (!m_Position)
 		return false;
 
-	//m_Position->SetPosition(128.0f, 100.0f, -150.0f);
-	//m_Position->SetRotation(19.0f, 0.0f, 0.0f);
-	m_Position->SetPosition(128.0f, 1.0f, 0.0f);
-	m_Position->SetRotation(0.0f, 0.0f, 0.0f);
+	// Terrain.vs: input.position.w = 1.0f
+	 m_Position->SetPosition(16.0f, 78.0f, 565.0f);
+	 m_Position->SetRotation(13.0f, 89.0f, 0.0f);
+
+	// Terrain.vs: input.position.w = 10.0f
+	//m_Position->SetPosition(-24.0f, 20.0f, 56.0f);
+	//m_Position->SetRotation(13.0f, 91.0f, 0.0f);
 
 	m_SkyDome = new SkyDomeClass;
 	if (!m_SkyDome)
@@ -87,7 +90,7 @@ bool ZoneClass::Initialize(D3DClass *direct3D,
 	}
 
 	m_displayUI = true;
-	m_wireFrame = true;
+	m_wireFrame = false;
 	m_play = false;
 
 	return true;
@@ -323,7 +326,7 @@ void ZoneClass::PushedF3Button(float frameTime)
 	//if (dir.y >= 360) dir.y -= 360;
 	//if (dir.z >= 360) dir.z -= 360;
 	//
-	//dir.x += frameTime / 5;
+	//dir.z -= frameTime / 5;
 	//
 	//m_Light->SetDirection(dir.x, dir.y, dir.z);
 	
@@ -331,9 +334,9 @@ void ZoneClass::PushedF3Button(float frameTime)
 
 	tempColor = m_SkyDome->GetApexColor();
 
-	tempColor.x -= frameTime / 10; // R
-	tempColor.y -= frameTime / 10; // G
-	tempColor.z -= frameTime / 10; // B
+	tempColor.x -= frameTime / 5; // R
+	tempColor.y -= frameTime / 5; // G
+	tempColor.z -= frameTime / 5; // B
 
 	m_SkyDome->SetApexColor(tempColor);
 
