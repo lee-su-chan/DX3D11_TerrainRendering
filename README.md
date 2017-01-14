@@ -63,9 +63,9 @@ F3: 상호작용 재생 켜기/끄기
 -이번 단계는 가까이서만 확인할 수 있으므로 헤드라인 사진은 없습니다.
 #### *Texture X, ColorMapping X*
 ![no texture colormapping](https://cloud.githubusercontent.com/assets/13383741/21742300/08996e26-d52f-11e6-9020-1ab6aea3890e.PNG)
-#### *Texture O, ColorMppaing X*
+#### *Texture O, ColorMapping X*
 ![have texture no colormapping](https://cloud.githubusercontent.com/assets/13383741/21742301/08c468ec-d52f-11e6-983e-dce4673c890a.PNG)
-#### *Texture O, ColorMppaing O*
+#### *Texture O, ColorMapping O*
 ![have texture colormapping](https://cloud.githubusercontent.com/assets/13383741/21742302/08ecdee4-d52f-11e6-8670-fd7ead45d656.PNG)
 1. 지형 노말 맵핑 구현  
 2. 이제부터 한 단계가 끝나면 개발자 노트를 쓸 것입니다.  
