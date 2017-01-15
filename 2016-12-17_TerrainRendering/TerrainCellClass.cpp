@@ -41,7 +41,7 @@ bool TerrainCellClass::Initialize(ID3D11Device *device,
 	if (!result)
 		return false;
 
-	terrainModel = 0;
+	terrainModel = NULL;
 
 	CalculateCellDemensions();
 
@@ -77,7 +77,7 @@ void TerrainCellClass::RenderLineBuffers(ID3D11DeviceContext *deviceContext)
 
 	deviceContext->IASetVertexBuffers(0, 1, &m_lineVertexBuffer, &stride, &offset);
 	deviceContext->IASetIndexBuffer(m_lineIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 	return;
 }
@@ -236,13 +236,13 @@ void TerrainCellClass::ShutdownBuffers()
 
 	if (m_indexBuffer)
 	{
-		delete[] m_indexBuffer;
+		m_indexBuffer->Release();
 		m_indexBuffer = NULL;
 	}
 
 	if (m_vertexBuffer)
 	{
-		delete[] m_vertexBuffer;
+		m_vertexBuffer->Release();
 		m_vertexBuffer = NULL;
 	}
 
