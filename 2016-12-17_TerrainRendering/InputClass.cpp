@@ -71,6 +71,8 @@ bool InputClass::initialze(HINSTANCE hinstance,
 
 	m_F1_released = true;
 	m_F2_released = true;
+	m_F3_released = true;
+	m_F4_released = true;
 
 	return true;
 }
@@ -265,6 +267,25 @@ bool InputClass::IsF3Toggled()
 	else
 	{
 		m_F3_released = true;
+	}
+
+	return false;
+}
+
+bool InputClass::IsF4Toggled()
+{
+	if (m_keyboardState[DIK_F4] & 0x80)
+	{
+		if (m_F4_released)
+		{
+			m_F4_released = false;
+
+			return true;
+		}
+	}
+	else
+	{
+		m_F4_released = true;
 	}
 
 	return false;
