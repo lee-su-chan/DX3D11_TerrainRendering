@@ -287,7 +287,7 @@ bool ZoneClass::Render(D3DClass *direct3D,
 
 	for (i = 0; i < m_Terrain->GetCellCount(); ++i)
 	{
-		result = m_Terrain->RenderCell(direct3D->GetDeviceContext(), i));
+		result = m_Terrain->RenderCell(direct3D->GetDeviceContext(), i);
 		if (!result)
 			return false;
 
@@ -296,8 +296,8 @@ bool ZoneClass::Render(D3DClass *direct3D,
 			worldMatrix,
 			viewMatrix,
 			projectionMatrix,
-			textureManager->GetTexture(0),
 			textureManager->GetTexture(1),
+			textureManager->GetTexture(2),
 			m_Light->GetDirection(),
 			m_Light->GetDiffuseColor());
 
