@@ -1,12 +1,11 @@
 #ifndef _TERRAINCLASS_H_
 #define _TERRAINCLASS_H_
 
-#include <d3d11.h>
-#include <DirectXMath.h>
 #include <fstream>
 #include <stdio.h>
 
-using namespace DirectX;
+#include "TerrainCellClass.h"
+
 using namespace std;
 
 class TerrainClass
@@ -58,9 +57,13 @@ public:
 
 	bool Initialize(ID3D11Device *, char *);
 	void Shutdown();
-	bool Render(ID3D11DeviceContext *);
+	
+	bool RenderCell(ID3D11DeviceContext *, int);
+	void RenderCellLines(ID3D11DeviceContext *, int);
 
-	int GetIndexCount();
+	int GetCellIndexCount(int);
+	int GetCellLinesIndexCount(int);
+	int GetCellCount();
 
 private:
 	bool LoadSetupFile(char *);
@@ -72,23 +75,21 @@ private:
 	bool LoadColorMap();
 	bool BuildTerrainModel();
 	void ShutdownTerrainModel();
-
 	void CalculateTerrainVectors();
 	void CalculateTangentBinormal(TempVertexType, TempVertexType, TempVertexType, VectorType &, VectorType &);
 
-	bool InitializeBuffers(ID3D11Device *);
-	void ShutdownBuffers();
-	void RenderBuffers(ID3D11DeviceContext *);
+	bool LoadTerrainCells(ID3D11Device *);
+	void ShutdownTerrainCells();
 
 private:
-	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
-	int m_vertexCount, m_indexCount;
-	int m_terrainHeight, m_terrainWidth;
+	int m_terrainHeight, m_terrainWidth, m_vertexCount;
 	float m_heightScale;
-
 	char *m_terrainFilename, *m_colorMapFilename;
 	HeightMapType *m_heightMap;
 	ModelType *m_terrainModel;
+
+	TerrainCellClass *m_TerrainCells;
+	int m_cellCount;
 };
 
 #endif
