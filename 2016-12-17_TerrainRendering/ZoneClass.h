@@ -37,7 +37,7 @@ private:
 	PositionClass *m_Position;
 	SkyDomeClass *m_SkyDome;
 	TerrainClass *m_Terrain;
-	bool m_displayUI, m_wireFrame, m_play;
+	bool m_displayUI, m_wireFrame, m_play, m_cellLines;
 };
 
 #endif

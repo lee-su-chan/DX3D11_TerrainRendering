@@ -92,6 +92,7 @@ bool ZoneClass::Initialize(D3DClass *direct3D,
 	m_displayUI = true;
 	m_wireFrame = false;
 	m_play = false;
+	m_cellLines = true;
 
 	return true;
 }
@@ -231,6 +232,9 @@ void ZoneClass::HandleMovementInput(InputClass *input, float frameTime)
 	if (input->IsF3Toggled())
 		m_play = !m_play;
 
+	if (input->IsF4Toggled())
+		m_cellLines = !m_cellLines;
+
 	return;
 }
 
@@ -241,6 +245,7 @@ bool ZoneClass::Render(D3DClass *direct3D,
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix, baseViewMatrix, orthoMatrix;
 	bool result;
 	XMFLOAT3 cameraPosition;
+	int i;
 
 	m_Camera->Render();
 
@@ -280,20 +285,38 @@ bool ZoneClass::Render(D3DClass *direct3D,
 	if (m_wireFrame)
 		direct3D->EnableWireframe();
 
-	m_Terrain->Render(direct3D->GetDeviceContext());
+	for (i = 0; i < m_Terrain->GetCellCount(); ++i)
+	{
+		result = m_Terrain->RenderCell(direct3D->GetDeviceContext(), i));
+		if (!result)
+			return false;
 
-	result = shaderManager->RenderTerrainShader(direct3D->GetDeviceContext(),
-		m_Terrain->GetIndexCount(),
-		worldMatrix,
-		viewMatrix,
-		projectionMatrix,
-		textureManager->GetTexture(1),
-		textureManager->GetTexture(2),
-		m_Light->GetDirection(),
-		m_Light->GetDiffuseColor());
+		result = shaderManager->RenderTerrainShader(direct3D->GetDeviceContext(),
+			m_Terrain->GetCellIndexCount(i),
+			worldMatrix,
+			viewMatrix,
+			projectionMatrix,
+			textureManager->GetTexture(0),
+			textureManager->GetTexture(1),
+			m_Light->GetDirection(),
+			m_Light->GetDiffuseColor());
 
-	if (!result)
-		return false;
+		if (!result)
+			return false;
+
+		if (m_cellLines)
+		{
+			m_Terrain->RenderCellLines(direct3D->GetDeviceContext(), i);
+			shaderManager->RenderColorShader(direct3D->GetDeviceContext(),
+				m_Terrain->GetCellLinesIndexCount(i),
+				worldMatrix,
+				viewMatrix,
+				projectionMatrix);
+
+			if (!result)
+				return false;
+		}
+	}
 
 	if (m_wireFrame)
 		direct3D->DisableWireframe();
