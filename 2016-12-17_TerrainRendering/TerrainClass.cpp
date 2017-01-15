@@ -46,7 +46,7 @@ bool TerrainClass::Initialize(ID3D11Device *device, char *setupFilename)
 	ShutdownHeightMap();
 
 	CalculateTerrainVectors();
-
+	
 	result = LoadTerrainCells(device);
 	if (!result)
 		return false;
@@ -740,7 +740,7 @@ bool TerrainClass::LoadTerrainCells(ID3D11Device *device)
 	m_cellCount = cellRowCount * cellRowCount;
 
 	m_TerrainCells = new TerrainCellClass[m_cellCount];
-	if (m_TerrainCells)
+	if (!m_TerrainCells)
 		return false;
 
 	for (j = 0; j < cellRowCount; ++j)
