@@ -48,7 +48,7 @@ public:
 	bool Initialize(ID3D11Device *, void *, int, int, int, int, int);
 	void Shutdown();
 	void Render(ID3D11DeviceContext *);
-	bool RenderLineBuffers(ID3D11DeviceContext *);
+	void RenderLineBuffers(ID3D11DeviceContext *);
 
 	int GetVertexCount();
 	int GetIndexCount();

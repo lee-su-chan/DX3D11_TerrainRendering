@@ -67,7 +67,7 @@ void TerrainCellClass::Render(ID3D11DeviceContext *deviceContext)
 	return;
 }
 
-bool TerrainCellClass::RenderLineBuffers(ID3D11DeviceContext *deviceContext)
+void TerrainCellClass::RenderLineBuffers(ID3D11DeviceContext *deviceContext)
 {
 	unsigned int stride;
 	unsigned int offset;
