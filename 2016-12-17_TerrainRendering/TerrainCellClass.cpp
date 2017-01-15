@@ -140,12 +140,14 @@ bool TerrainCellClass::InitializeBuffers(ID3D11Device *device,
 	if (!indices)
 		return false;
 
-	modelIndex = (nodeIndexX * (cellWidth - 1) + nodeIndexY * (cellHeight - 1) * (terrainWidth - 1)) * 6;
+	modelIndex = (nodeIndexX * (cellWidth - 1) + 
+		nodeIndexY * (cellHeight - 1) * (terrainWidth - 1)) * 6;
+
 	index = 0;
 
 	for (j = 0; j < cellHeight - 1; ++j)
 	{
-		for (i = 0; i < cellWidth - 1; ++i)
+		for (i = 0; i < (cellWidth - 1) * 6; ++i)
 		{
 			vertices[index].position = XMFLOAT3(terrainModel[modelIndex].x,
 				terrainModel[modelIndex].y,
@@ -171,7 +173,7 @@ bool TerrainCellClass::InitializeBuffers(ID3D11Device *device,
 			++index;
 		}
 
-		modelIndex += terrainWidth * 6 + cellWidth * 6;
+		modelIndex += terrainWidth * 6 - cellWidth * 6;
 	}
 
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -416,11 +418,6 @@ bool TerrainCellClass::BuildLineBuffers(ID3D11Device *device)
 	++index;
 
 	vertices[index].position = XMFLOAT3(m_maxWidth, m_maxHeight, m_minDepth);
-	vertices[index].color = lineColor;
-	indices[index] = index;
-	++index;
-
-	vertices[index].position = XMFLOAT3(m_minWidth, m_minHeight, m_minDepth);
 	vertices[index].color = lineColor;
 	indices[index] = index;
 	++index;
