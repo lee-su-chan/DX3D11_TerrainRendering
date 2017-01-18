@@ -76,10 +76,10 @@ void FrustumClass::ConstructFrustum(XMMATRIX projectionMatrix, XMMATRIX viewMatr
 	m_planes[2][2] /= length;
 	m_planes[2][3] /= length;
 
-	m_planes[3][0] /= matrix._14 - matrix._11;
-	m_planes[3][1] /= matrix._24 - matrix._21;
-	m_planes[3][2] /= matrix._34 - matrix._31;
-	m_planes[3][3] /= matrix._44 - matrix._41;
+	m_planes[3][0] = matrix._14 - matrix._11;
+	m_planes[3][1] = matrix._24 - matrix._21;
+	m_planes[3][2] = matrix._34 - matrix._31;
+	m_planes[3][3] = matrix._44 - matrix._41;
 	length = sqrtf(m_planes[3][0] * m_planes[3][0] +
 		m_planes[3][1] * m_planes[3][1] +
 		m_planes[3][2] * m_planes[3][2]);
