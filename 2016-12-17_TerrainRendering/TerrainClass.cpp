@@ -65,9 +65,48 @@ void TerrainClass::Shutdown()
 	return;
 }
 
-bool TerrainClass::RenderCell(ID3D11DeviceContext *deviceContext, int cellId)
+void TerrainClass::Frame()
 {
+	m_renderCount = 0;
+	m_cellsDrawn = 0;
+	m_cellsCulled = 0;
+
+	return;
+}
+
+bool TerrainClass::RenderCell(ID3D11DeviceContext *deviceContext, 
+	int cellId,
+	FrustumClass *Frustum)
+{
+	float maxWidth, maxHeight, maxDepth, minWidth, minHeight, minDepth;
+	bool result;
+
+	m_TerrainCells[cellId].GetCellDimensions(maxWidth,
+		maxHeight,
+		maxDepth,
+		minWidth,
+		minHeight,
+		minDepth);
+
+	result = Frustum->CheckRectangle2(maxWidth,
+		maxHeight,
+		maxDepth,
+		minWidth,
+		minHeight,
+		minDepth);
+
+	if (!result)
+	{
+		++m_cellsCulled;
+
+		return false;
+	}
+
 	m_TerrainCells[cellId].Render(deviceContext);
+
+	m_renderCount += m_TerrainCells[cellId].GetVertexCount() / 3;
+	
+	++m_cellsDrawn;
 
 	return true;
 }
@@ -92,6 +131,21 @@ int TerrainClass::GetCellLinesIndexCount(int cellId)
 int TerrainClass::GetCellCount()
 {
 	return m_cellCount;
+}
+
+int TerrainClass::GetRenderCount()
+{
+	return m_renderCount;
+}
+
+int TerrainClass::GetCellsDrawn()
+{
+	return m_cellsDrawn;
+}
+
+int TerrainClass::GetCellsCulled()
+{
+	return m_cellsCulled;
 }
 
 bool TerrainClass::LoadSetupFile(char *filename)

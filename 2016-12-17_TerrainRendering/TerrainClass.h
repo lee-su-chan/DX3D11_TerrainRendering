@@ -5,22 +5,13 @@
 #include <stdio.h>
 
 #include "TerrainCellClass.h"
+#include "FrustumClass.h"
 
 using namespace std;
 
 class TerrainClass
 {
 private:
-	struct VertexType
-	{
-		XMFLOAT3 position;
-		XMFLOAT2 texture;
-		XMFLOAT3 normal;
-		XMFLOAT3 tangent;
-		XMFLOAT3 binormal;
-		XMFLOAT3 color;
-	};
-
 	struct HeightMapType
 	{
 		float x, y, z;
@@ -58,12 +49,18 @@ public:
 	bool Initialize(ID3D11Device *, char *);
 	void Shutdown();
 	
-	bool RenderCell(ID3D11DeviceContext *, int);
+	void Frame();
+
+	bool RenderCell(ID3D11DeviceContext *, int, FrustumClass *);
 	void RenderCellLines(ID3D11DeviceContext *, int);
 
 	int GetCellIndexCount(int);
 	int GetCellLinesIndexCount(int);
 	int GetCellCount();
+
+	int GetRenderCount();
+	int GetCellsDrawn();
+	int GetCellsCulled();
 
 private:
 	bool LoadSetupFile(char *);
@@ -87,9 +84,8 @@ private:
 	char *m_terrainFilename, *m_colorMapFilename;
 	HeightMapType *m_heightMap;
 	ModelType *m_terrainModel;
-
 	TerrainCellClass *m_TerrainCells;
-	int m_cellCount;
+	int m_cellCount, m_renderCount, m_cellsDrawn, m_cellsCulled;
 };
 
 #endif
