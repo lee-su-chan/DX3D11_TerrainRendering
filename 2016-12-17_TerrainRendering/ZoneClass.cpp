@@ -6,6 +6,7 @@ ZoneClass::ZoneClass()
 	m_Camera = 0;
 	m_Light = 0;
 	m_Position = 0;
+	m_Frustum = 0;
 	m_SkyDome = 0;
 	m_Terrain = 0;
 }
@@ -62,8 +63,14 @@ bool ZoneClass::Initialize(D3DClass *direct3D,
 	 m_Position->SetRotation(13.0f, 89.0f, 0.0f);
 
 	// Terrain.vs: input.position.w = 10.0f
-	//m_Position->SetPosition(-24.0f, 20.0f, 56.0f);
-	//m_Position->SetRotation(13.0f, 91.0f, 0.0f);
+	//m_Position->SetPosition(-55.0f, 51.0f, 53.0f);
+	//m_Position->SetRotation(23.0f, 91.0f, 0.0f);
+
+	 m_Frustum = new FrustumClass;
+	 if (!m_Frustum)
+		 return false;
+
+	 m_Frustum->Initialize(screenDepth);
 
 	m_SkyDome = new SkyDomeClass;
 	if (!m_SkyDome)
@@ -111,6 +118,12 @@ void ZoneClass::Shutdown()
 		m_SkyDome->Shutdown();
 		delete m_SkyDome;
 		m_SkyDome = NULL;
+	}
+
+	if (m_Frustum)
+	{
+		delete m_Frustum;
+		m_Frustum = NULL;
 	}
 
 	if (m_Position)
@@ -172,6 +185,8 @@ bool ZoneClass::Frame(D3DClass *direct3D,
 	
 	if (!result)
 		return false;
+
+	m_Terrain->Frame();
 
 	result = Render(direct3D, shaderManager, textureManager);
 	if (!result)
@@ -257,6 +272,8 @@ bool ZoneClass::Render(D3DClass *direct3D,
 
 	cameraPosition = m_Camera->GetPosition();
 
+	m_Frustum->ConstructFrustum(projectionMatrix, viewMatrix);
+
 	direct3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
 	direct3D->TurnOffCulling();
@@ -287,39 +304,47 @@ bool ZoneClass::Render(D3DClass *direct3D,
 
 	for (i = 0; i < m_Terrain->GetCellCount(); ++i)
 	{
-		result = m_Terrain->RenderCell(direct3D->GetDeviceContext(), i);
-		if (!result)
-			return false;
-
-		result = shaderManager->RenderTerrainShader(direct3D->GetDeviceContext(),
-			m_Terrain->GetCellIndexCount(i),
-			worldMatrix,
-			viewMatrix,
-			projectionMatrix,
-			textureManager->GetTexture(1),
-			textureManager->GetTexture(2),
-			m_Light->GetDirection(),
-			m_Light->GetDiffuseColor());
-
-		if (!result)
-			return false;
-
-		if (m_cellLines)
+		result = m_Terrain->RenderCell(direct3D->GetDeviceContext(), i, m_Frustum);
+		if (result)
 		{
-			m_Terrain->RenderCellLines(direct3D->GetDeviceContext(), i);
-			shaderManager->RenderColorShader(direct3D->GetDeviceContext(),
-				m_Terrain->GetCellLinesIndexCount(i),
+			result = shaderManager->RenderTerrainShader(direct3D->GetDeviceContext(),
+				m_Terrain->GetCellIndexCount(i),
 				worldMatrix,
 				viewMatrix,
-				projectionMatrix);
+				projectionMatrix,
+				textureManager->GetTexture(1),
+				textureManager->GetTexture(2),
+				m_Light->GetDirection(),
+				m_Light->GetDiffuseColor());
 
 			if (!result)
 				return false;
+
+			if (m_cellLines)
+			{
+				m_Terrain->RenderCellLines(direct3D->GetDeviceContext(), i);
+				shaderManager->RenderColorShader(direct3D->GetDeviceContext(),
+					m_Terrain->GetCellLinesIndexCount(i),
+					worldMatrix,
+					viewMatrix,
+					projectionMatrix);
+
+				if (!result)
+					return false;
+			}
 		}
 	}
 
 	if (m_wireFrame)
 		direct3D->DisableWireframe();
+
+	result = m_UserInterface->UpdateRenderCounts(direct3D->GetDeviceContext(),
+		m_Terrain->GetRenderCount(),
+		m_Terrain->GetCellsDrawn(),
+		m_Terrain->GetCellsCulled());
+
+	if (!result)
+		return false;
 
 	if (m_displayUI)
 	{
