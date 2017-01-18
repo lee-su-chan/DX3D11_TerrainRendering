@@ -37,24 +37,25 @@ void FrustumClass::ConstructFrustum(XMMATRIX projectionMatrix, XMMATRIX viewMatr
 	finalMatrix = XMMatrixMultiply(viewMatrix, projectionMatrix);
 	XMStoreFloat4x4(&matrix, finalMatrix);
 
+	// Calculate near plane of frustum
 	m_planes[0][0] = matrix._14 + matrix._13;
 	m_planes[0][1] = matrix._24 + matrix._23;
 	m_planes[0][2] = matrix._34 + matrix._33;
 	m_planes[0][3] = matrix._44 + matrix._43;
-
+	// Normalize the near plane
 	length = sqrtf(m_planes[0][0] * m_planes[0][0] +
 		m_planes[0][1] * m_planes[0][1] +
 		m_planes[0][2] * m_planes[0][2]);
+	// Calculate far plane of frustum
 	m_planes[0][0] /= length;
 	m_planes[0][1] /= length;
 	m_planes[0][2] /= length;
 	m_planes[0][3] /= length;
 
-	m_planes[1][0] /= matrix._14 + matrix._13;
-	m_planes[1][1] /= matrix._24 + matrix._23;
-	m_planes[1][2] /= matrix._34 + matrix._33;
-	m_planes[1][3] /= matrix._44 + matrix._43;
-
+	m_planes[1][0] = matrix._14 - matrix._13;
+	m_planes[1][1] = matrix._24 - matrix._23;
+	m_planes[1][2] = matrix._34 - matrix._33;
+	m_planes[1][3] = matrix._44 - matrix._43;
 	length = sqrtf(m_planes[1][0] * m_planes[1][0] +
 		m_planes[1][1] * m_planes[1][1] +
 		m_planes[1][2] * m_planes[1][2]);
@@ -63,11 +64,10 @@ void FrustumClass::ConstructFrustum(XMMATRIX projectionMatrix, XMMATRIX viewMatr
 	m_planes[1][2] /= length;
 	m_planes[1][3] /= length;
 
-	m_planes[2][0] /= matrix._14 + matrix._11;
-	m_planes[2][1] /= matrix._24 + matrix._21;
-	m_planes[2][2] /= matrix._34 + matrix._31;
-	m_planes[2][3] /= matrix._44 + matrix._41;
-
+	m_planes[2][0] = matrix._14 + matrix._11;
+	m_planes[2][1] = matrix._24 + matrix._21;
+	m_planes[2][2] = matrix._34 + matrix._31;
+	m_planes[2][3] = matrix._44 + matrix._41;
 	length = sqrtf(m_planes[2][0] * m_planes[2][0] +
 		m_planes[2][1] * m_planes[2][1] +
 		m_planes[2][2] * m_planes[2][2]);
@@ -76,11 +76,10 @@ void FrustumClass::ConstructFrustum(XMMATRIX projectionMatrix, XMMATRIX viewMatr
 	m_planes[2][2] /= length;
 	m_planes[2][3] /= length;
 
-	m_planes[3][0] /= matrix._14 + matrix._11;
-	m_planes[3][1] /= matrix._24 + matrix._21;
-	m_planes[3][2] /= matrix._34 + matrix._31;
-	m_planes[3][3] /= matrix._44 + matrix._41;
-
+	m_planes[3][0] /= matrix._14 - matrix._11;
+	m_planes[3][1] /= matrix._24 - matrix._21;
+	m_planes[3][2] /= matrix._34 - matrix._31;
+	m_planes[3][3] /= matrix._44 - matrix._41;
 	length = sqrtf(m_planes[3][0] * m_planes[3][0] +
 		m_planes[3][1] * m_planes[3][1] +
 		m_planes[3][2] * m_planes[3][2]);
@@ -89,11 +88,10 @@ void FrustumClass::ConstructFrustum(XMMATRIX projectionMatrix, XMMATRIX viewMatr
 	m_planes[3][2] /= length;
 	m_planes[3][3] /= length;
 
-	m_planes[4][0] /= matrix._14 + matrix._12;
-	m_planes[4][1] /= matrix._24 + matrix._22;
-	m_planes[4][2] /= matrix._34 + matrix._32;
-	m_planes[4][3] /= matrix._44 + matrix._42;
-
+	m_planes[4][0] = matrix._14 - matrix._12;
+	m_planes[4][1] = matrix._24 - matrix._22;
+	m_planes[4][2] = matrix._34 - matrix._32;
+	m_planes[4][3] = matrix._44 - matrix._42;
 	length = sqrtf(m_planes[4][0] * m_planes[4][0] +
 		m_planes[4][1] * m_planes[4][1] +
 		m_planes[4][2] * m_planes[4][2]);
@@ -102,11 +100,10 @@ void FrustumClass::ConstructFrustum(XMMATRIX projectionMatrix, XMMATRIX viewMatr
 	m_planes[4][2] /= length;
 	m_planes[4][3] /= length;
 
-	m_planes[5][0] /= matrix._14 + matrix._12;
-	m_planes[5][1] /= matrix._24 + matrix._22;
-	m_planes[5][2] /= matrix._34 + matrix._32;
-	m_planes[5][3] /= matrix._44 + matrix._42;
-
+	m_planes[5][0] = matrix._14 + matrix._12;
+	m_planes[5][1] = matrix._24 + matrix._22;
+	m_planes[5][2] = matrix._34 + matrix._32;
+	m_planes[5][3] = matrix._44 + matrix._42;
 	length = sqrtf(m_planes[5][0] * m_planes[5][0] +
 		m_planes[5][1] * m_planes[5][1] +
 		m_planes[5][2] * m_planes[5][2]);
