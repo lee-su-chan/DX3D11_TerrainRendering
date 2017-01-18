@@ -66,11 +66,11 @@ bool ZoneClass::Initialize(D3DClass *direct3D,
 	//m_Position->SetPosition(-55.0f, 51.0f, 53.0f);
 	//m_Position->SetRotation(23.0f, 91.0f, 0.0f);
 
-	 m_Frustum = new FrustumClass;
-	 if (!m_Frustum)
-		 return false;
+	m_Frustum = new FrustumClass;
+	if (!m_Frustum)
+		return false;
 
-	 m_Frustum->Initialize(screenDepth);
+	m_Frustum->Initialize(screenDepth);
 
 	m_SkyDome = new SkyDomeClass;
 	if (!m_SkyDome)
