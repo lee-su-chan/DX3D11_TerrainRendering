@@ -694,7 +694,7 @@ bool UserInterfaceClass::UpdateRenderCounts(ID3D11DeviceContext *deviceContext,
 	if (!result)
 		return false;
 
-	_itoa_s(renderCount, tempString, 10);
+	_itoa_s(nodeCulled, tempString, 10);
 
 	strcpy_s(finalString, "Cells Culled: ");
 	strcat_s(finalString, tempString);
