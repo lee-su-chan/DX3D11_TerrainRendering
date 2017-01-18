@@ -7,6 +7,7 @@ UserInterfaceClass::UserInterfaceClass()
 	m_videoStrings = 0;
 	m_positionStrings = 0;
 	m_skyColorStrings = 0;
+	m_renderCountStrings = 0;
 }
 
 UserInterfaceClass::UserInterfaceClass(const UserInterfaceClass &other)
@@ -405,11 +406,76 @@ bool UserInterfaceClass::Initialize(D3DClass *Direct3D,
 	for (i = 0; i < 8; ++i)
 		m_previousSkyColor[i] = -1;
 
+	m_renderCountStrings = new TextClass[3];
+	if (!m_renderCountStrings)
+		return false;
+
+	result = m_renderCountStrings[0].Initialize(Direct3D->GetDevice(),
+		Direct3D->GetDeviceContext(),
+		screenWidth,
+		screenHeight,
+		32,
+		false,
+		m_font1,
+		"Polys Drawn: 0",
+		10,
+		-490,
+		1.0f,
+		1.0f,
+		1.0f);
+
+	if (!result)
+		return false;
+
+	result = m_renderCountStrings[1].Initialize(Direct3D->GetDevice(),
+		Direct3D->GetDeviceContext(),
+		screenWidth,
+		screenHeight,
+		32,
+		false,
+		m_font1,
+		"Cells Drawn: 0",
+		10,
+		-510,
+		1.0f,
+		1.0f,
+		1.0f);
+
+	if (!result)
+		return false;
+
+	result = m_renderCountStrings[2].Initialize(Direct3D->GetDevice(),
+		Direct3D->GetDeviceContext(),
+		screenWidth,
+		screenHeight,
+		32,
+		false,
+		m_font1,
+		"Cells Culled: 0",
+		10,
+		-530,
+		1.0f,
+		1.0f,
+		1.0f);
+
+	if (!result)
+		return false;
+
 	return true;
 }
 
 void UserInterfaceClass::Shutdown()
 {
+	if (m_renderCountStrings)
+	{
+		m_renderCountStrings[0].Shutdown();
+		m_renderCountStrings[1].Shutdown();
+		m_renderCountStrings[2].Shutdown();
+
+		delete[] m_renderCountStrings;
+		m_renderCountStrings = NULL;
+	}
+
 	if (m_positionStrings)
 	{
 		m_positionStrings[0].Shutdown();
@@ -571,8 +637,79 @@ bool UserInterfaceClass::Render(D3DClass *Direct3D,
 			orthoMatrix,
 			m_font1->GetTexture());
 
+	for (i = 0; i < 3; ++i)
+		m_renderCountStrings[i].Render(Direct3D->GetDeviceContext(),
+			shaderManager,
+			worldMatrix,
+			viewMatrix,
+			orthoMatrix,
+			m_font1->GetTexture());
+
 	Direct3D->DisableAlphaBlending();
 	Direct3D->TurnZBufferOn();
+
+	return true;
+}
+
+bool UserInterfaceClass::UpdateRenderCounts(ID3D11DeviceContext *deviceContext,
+	int renderCount,
+	int nodesDrawn,
+	int nodeCulled)
+{
+	char tempString[32];
+	char finalString[32];
+	bool result;
+
+	_itoa_s(renderCount, tempString, 10);
+
+	strcpy_s(finalString, "Polys Drawn: ");
+	strcat_s(finalString, tempString);
+
+	result = m_renderCountStrings[0].UpdateSentence(deviceContext,
+		m_font1,
+		finalString,
+		10,
+		-490,
+		1.0f,
+		1.0f,
+		1.0f);
+
+	if (!result)
+		return false;
+
+	_itoa_s(nodesDrawn, tempString, 10);
+
+	strcpy_s(finalString, "Cells Drawn: ");
+	strcat_s(finalString, tempString);
+
+	result = m_renderCountStrings[1].UpdateSentence(deviceContext,
+		m_font1,
+		finalString,
+		10,
+		-510,
+		1.0f,
+		1.0f,
+		1.0f);
+
+	if (!result)
+		return false;
+
+	_itoa_s(renderCount, tempString, 10);
+
+	strcpy_s(finalString, "Cells Culled: ");
+	strcat_s(finalString, tempString);
+
+	result = m_renderCountStrings[2].UpdateSentence(deviceContext,
+		m_font1,
+		finalString,
+		10,
+		-530,
+		1.0f,
+		1.0f,
+		1.0f);
+
+	if (!result)
+		return false;
 
 	return true;
 }
