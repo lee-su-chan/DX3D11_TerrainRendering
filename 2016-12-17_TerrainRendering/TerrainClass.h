@@ -57,10 +57,10 @@ public:
 	int GetCellIndexCount(int);
 	int GetCellLinesIndexCount(int);
 	int GetCellCount();
-
 	int GetRenderCount();
 	int GetCellsDrawn();
 	int GetCellsCulled();
+	int GetHeightAtPosition(float, float, float &);
 
 private:
 	bool LoadSetupFile(char *);
@@ -74,9 +74,9 @@ private:
 	void ShutdownTerrainModel();
 	void CalculateTerrainVectors();
 	void CalculateTangentBinormal(TempVertexType, TempVertexType, TempVertexType, VectorType &, VectorType &);
-
 	bool LoadTerrainCells(ID3D11Device *);
 	void ShutdownTerrainCells();
+	bool CheckHeightOfTriangle(float, float, float &, float[3], float[3], float[3]);
 
 private:
 	int m_terrainHeight, m_terrainWidth, m_vertexCount;

@@ -148,6 +148,69 @@ int TerrainClass::GetCellsCulled()
 	return m_cellsCulled;
 }
 
+int TerrainClass::GetHeightAtPosition(float inputX, float inputZ, float &height)
+{
+	int i, cellId, index;
+	float vertex1[3], vertex2[3], vertex3[3];
+	bool foundHeight;
+	float maxWidth, maxHeight, maxDepth, minWidth, minHeight, minDepth;
+
+	cellId = -1;
+	for (i = 0; i < m_cellCount; ++i)
+	{
+		m_TerrainCells[i].GetCellDimensions(maxWidth,
+			maxHeight,
+			maxDepth,
+			minWidth,
+			minHeight,
+			minDepth);
+
+		if (inputX < maxWidth &&
+			inputX > minWidth &&
+			inputZ < maxWidth &&
+			inputZ > minWidth)
+		{
+			cellId = i;
+			i = m_cellCount;
+		}
+	}
+
+	if (cellId == -1)
+		return false;
+
+	for (i = 0; i < m_TerrainCells[cellId].GetVertexCount() / 3; ++i)
+	{
+		index = i * 3;
+
+		vertex1[0] = m_TerrainCells[cellId].m_vertexList[index].x;
+		vertex1[1] = m_TerrainCells[cellId].m_vertexList[index].y;
+		vertex1[2] = m_TerrainCells[cellId].m_vertexList[index].z;
+		++index;
+
+		vertex2[0] = m_TerrainCells[cellId].m_vertexList[index].x;
+		vertex2[1] = m_TerrainCells[cellId].m_vertexList[index].y;
+		vertex2[2] = m_TerrainCells[cellId].m_vertexList[index].z;
+		++index;
+
+		vertex3[0] = m_TerrainCells[cellId].m_vertexList[index].x;
+		vertex3[1] = m_TerrainCells[cellId].m_vertexList[index].y;
+		vertex3[2] = m_TerrainCells[cellId].m_vertexList[index].z;
+		++index;
+
+		foundHeight = CheckHeightOfTriangle(inputX,
+			inputZ,
+			height,
+			vertex1,
+			vertex2,
+			vertex3);
+
+		if (foundHeight)
+			return true;
+	}
+
+	return false;
+}
+
 bool TerrainClass::LoadSetupFile(char *filename)
 {
 	int stringLength;
@@ -833,4 +896,112 @@ void TerrainClass::ShutdownTerrainCells()
 	}
 
 	return;
+}
+
+bool TerrainClass::CheckHeightOfTriangle(float x,
+	float z,
+	float &height,
+	float v0[3], 
+	float v1[3], 
+	float v2[3])
+{
+	float startVector[3], directionVector[3], edge1[3], edge2[3], normal[3];
+	float Q[3], e1[3], e2[3], e3[3], edgeNormal[3], temp[3];
+	float magnitude, D, denominator, numerator, t, determinant;
+
+	startVector[0] = x;
+	startVector[1] = 0.0f;
+	startVector[2] = z;
+
+	directionVector[0] = 0.0f;
+	directionVector[1] = -1.0f;
+	directionVector[2] = 0.0f;
+
+	edge1[0] = v1[0] - v0[0];
+	edge1[1] = v1[1] - v0[1];
+	edge1[2] = v1[2] - v0[2];
+
+	edge2[0] = v2[0] - v0[0];
+	edge2[1] = v2[1] - v0[1];
+	edge2[2] = v2[2] - v0[2];
+
+	normal[0] = edge1[1] * edge2[2] - edge1[2] * edge2[1];
+	normal[1] = edge1[2] * edge2[0] - edge1[0] * edge2[2];
+	normal[2] = edge1[0] * edge2[1] - edge1[1] * edge2[0];
+
+	magnitude = (float)sqrt(normal[0] * normal[0] +
+		normal[1] * normal[1] +
+		normal[2] * normal[2]);
+
+	normal[0] = normal[0] / magnitude;
+	normal[1] = normal[1] / magnitude;
+	normal[2] = normal[2] / magnitude;
+
+	// distance
+	D = -normal[0] * v0[0] + -normal[1] * v0[1] + -normal[2] * v0[2];
+
+	denominator = normal[0] * directionVector[0] +
+		normal[1] * directionVector[1] +
+		normal[2] * directionVector[2];
+
+	if (fabs(denominator) < 0.0001f)
+		return false;
+
+	numerator = -1.0f * ((normal[0] * startVector[0] +
+		normal[1] * startVector[1] +
+		normal[2] * startVector[2]) + D);
+
+	// intersect the triangle
+	t = numerator / denominator;
+
+	// intersect vector
+	Q[0] = startVector[0] + directionVector[0] * t;
+	Q[1] = startVector[1] + directionVector[1] * t;
+	Q[2] = startVector[2] + directionVector[2] * t;
+
+	e1[0] = v1[0] - v0[0];
+	e1[1] = v1[1] - v0[1];
+	e1[2] = v1[2] - v0[2];
+
+	e2[0] = v1[0] - v0[0];
+	e2[1] = v1[1] - v0[1];
+	e2[2] = v1[2] - v0[2];
+
+	e3[0] = v1[0] - v0[0];
+	e3[1] = v1[1] - v0[1];
+	e3[2] = v1[2] - v0[2];
+
+	edgeNormal[0] = e1[1] * normal[2] - e1[2] * normal[1];
+	edgeNormal[1] = e1[2] * normal[0] - e1[0] * normal[2];
+	edgeNormal[2] = e1[0] * normal[1] - e1[1] * normal[0];
+
+	temp[0] = Q[0] - v0[0];
+	temp[1] = Q[1] - v0[1];
+	temp[2] = Q[2] - v0[2];
+
+	determinant = edgeNormal[0] * temp[0] +
+		edgeNormal[1] * temp[1] +
+		edgeNormal[2] * temp[2];
+
+	if (determinant > 0.001f)
+		return false;
+
+	edgeNormal[0] = e3[1] * normal[2] - e3[2] * normal[1];
+	edgeNormal[1] = e3[2] * normal[0] - e3[0] * normal[2];
+	edgeNormal[2] = e3[0] * normal[1] - e3[1] * normal[0];
+
+	temp[0] = Q[0] - v2[0];
+	temp[1] = Q[1] - v2[1];
+	temp[2] = Q[2] - v2[2];
+
+	determinant = edgeNormal[0] * temp[0] +
+		edgeNormal[1] * temp[1] +
+		edgeNormal[2] * temp[2];
+
+	if (determinant > 0.001f)
+		return false;
+
+	height = Q[1];
+
+	return true;
 }
