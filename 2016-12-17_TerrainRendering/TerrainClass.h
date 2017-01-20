@@ -60,7 +60,7 @@ public:
 	int GetRenderCount();
 	int GetCellsDrawn();
 	int GetCellsCulled();
-	int GetHeightAtPosition(float, float, float &);
+	bool GetHeightAtPosition(float, float, float &);
 
 private:
 	bool LoadSetupFile(char *);

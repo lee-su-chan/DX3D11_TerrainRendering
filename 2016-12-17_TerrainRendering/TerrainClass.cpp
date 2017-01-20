@@ -148,7 +148,7 @@ int TerrainClass::GetCellsCulled()
 	return m_cellsCulled;
 }
 
-int TerrainClass::GetHeightAtPosition(float inputX, float inputZ, float &height)
+bool TerrainClass::GetHeightAtPosition(float inputX, float inputZ, float &height)
 {
 	int i, cellId, index;
 	float vertex1[3], vertex2[3], vertex3[3];
@@ -167,8 +167,8 @@ int TerrainClass::GetHeightAtPosition(float inputX, float inputZ, float &height)
 
 		if (inputX < maxWidth &&
 			inputX > minWidth &&
-			inputZ < maxWidth &&
-			inputZ > minWidth)
+			inputZ < maxDepth &&
+			inputZ > minDepth)
 		{
 			cellId = i;
 			i = m_cellCount;
@@ -963,13 +963,13 @@ bool TerrainClass::CheckHeightOfTriangle(float x,
 	e1[1] = v1[1] - v0[1];
 	e1[2] = v1[2] - v0[2];
 
-	e2[0] = v1[0] - v0[0];
-	e2[1] = v1[1] - v0[1];
-	e2[2] = v1[2] - v0[2];
+	e2[0] = v2[0] - v1[0];
+	e2[1] = v2[1] - v1[1];
+	e2[2] = v2[2] - v1[2];
 
-	e3[0] = v1[0] - v0[0];
-	e3[1] = v1[1] - v0[1];
-	e3[2] = v1[2] - v0[2];
+	e3[0] = v0[0] - v2[0];
+	e3[1] = v0[1] - v2[1];
+	e3[2] = v0[2] - v2[2];
 
 	edgeNormal[0] = e1[1] * normal[2] - e1[2] * normal[1];
 	edgeNormal[1] = e1[2] * normal[0] - e1[0] * normal[2];
@@ -978,6 +978,21 @@ bool TerrainClass::CheckHeightOfTriangle(float x,
 	temp[0] = Q[0] - v0[0];
 	temp[1] = Q[1] - v0[1];
 	temp[2] = Q[2] - v0[2];
+
+	determinant = edgeNormal[0] * temp[0] +
+		edgeNormal[1] * temp[1] +
+		edgeNormal[2] * temp[2];
+
+	if (determinant > 0.001f)
+		return false;
+
+	edgeNormal[0] = e2[1] * normal[2] - e2[2] * normal[1];
+	edgeNormal[1] = e2[2] * normal[0] - e2[0] * normal[2];
+	edgeNormal[2] = e2[0] * normal[1] - e2[1] * normal[0];
+
+	temp[0] = Q[0] - v1[0];
+	temp[1] = Q[1] - v1[1];
+	temp[2] = Q[2] - v1[2];
 
 	determinant = edgeNormal[0] * temp[0] +
 		edgeNormal[1] * temp[1] +
