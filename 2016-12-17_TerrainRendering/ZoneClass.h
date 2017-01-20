@@ -39,7 +39,7 @@ private:
 	FrustumClass *m_Frustum;
 	SkyDomeClass *m_SkyDome;
 	TerrainClass *m_Terrain;
-	bool m_displayUI, m_wireFrame, m_play, m_cellLines;
+	bool m_displayUI, m_wireFrame, m_play, m_cellLines, m_heightLocked;
 };
 
 #endif

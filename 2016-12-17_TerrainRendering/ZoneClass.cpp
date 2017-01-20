@@ -100,6 +100,7 @@ bool ZoneClass::Initialize(D3DClass *direct3D,
 	m_wireFrame = false;
 	m_play = false;
 	m_cellLines = true;
+	m_heightLocked = true;
 
 	return true;
 }
@@ -161,8 +162,8 @@ bool ZoneClass::Frame(D3DClass *direct3D,
 	float frameTime,
 	int fps)
 {
-	bool result;
-	float posX, posY, posZ, rotX, rotY, rotZ;
+	bool result, foundHeight;
+	float posX, posY, posZ, rotX, rotY, rotZ, height;
 
 	HandleMovementInput(input, frameTime);
 
@@ -187,6 +188,16 @@ bool ZoneClass::Frame(D3DClass *direct3D,
 		return false;
 
 	m_Terrain->Frame();
+
+	if (m_heightLocked)
+	{
+		foundHeight = m_Terrain->GetHeightAtPosition(posX, posY, height);
+		if (foundHeight)
+		{
+			m_Position->SetPosition(posX, height + 1.0f, posZ);
+			m_Camera->SetPosition(posX, height + 1.0f, posZ);
+		}
+	}
 
 	result = Render(direct3D, shaderManager, textureManager);
 	if (!result)
@@ -249,6 +260,9 @@ void ZoneClass::HandleMovementInput(InputClass *input, float frameTime)
 
 	if (input->IsF4Toggled())
 		m_cellLines = !m_cellLines;
+
+	if (input->IsF5Toggled())
+		m_heightLocked = !m_heightLocked;
 
 	return;
 }
