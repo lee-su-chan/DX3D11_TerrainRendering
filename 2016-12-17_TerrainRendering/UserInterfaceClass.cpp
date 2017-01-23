@@ -596,7 +596,7 @@ bool UserInterfaceClass::Frame(ID3D11DeviceContext *deviceContext,
 	if (!result)
 		return false;
 
-	m_MiniMap->PositionUpdate(posX, posY);
+	m_MiniMap->PositionUpdate(posX, posZ);
 
 	return true;
 }
