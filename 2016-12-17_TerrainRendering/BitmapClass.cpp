@@ -173,9 +173,9 @@ bool BitmapClass::UpdateBuffers(ID3D11DeviceContext *deviceContext,
 	m_previousPosX = positionX;
 	m_previousPosY = positionY;
 
-	left = (float)m_screenWidth / 2 * -1 + (float)positionX;
+	left = (float)(m_screenWidth / 2 * -1) + (float)positionX;
 	right = left + (float)m_bitmapWidth;
-	top = (float)m_screenHeight / 2 - (float)positionY;
+	top = (float)(m_screenHeight / 2) - (float)positionY;
 	bottom = top - (float)m_bitmapHeight;
 
 	vertices = new VertexType[m_vertexCount];
