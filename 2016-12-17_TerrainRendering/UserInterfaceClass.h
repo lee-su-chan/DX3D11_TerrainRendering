@@ -2,6 +2,7 @@
 #define _USERINTERFACECLASS_H_
 
 #include "TextClass.h"
+#include "MinimapClass.h"
 
 class UserInterfaceClass
 {
@@ -36,6 +37,8 @@ private:
 	int m_previousFps;
 	int m_previousPosition[6];
 	int m_previousSkyColor[8];
+
+	MiniMapClass *m_MiniMap;
 };
 
 #endif

@@ -8,6 +8,7 @@ UserInterfaceClass::UserInterfaceClass()
 	m_positionStrings = 0;
 	m_skyColorStrings = 0;
 	m_renderCountStrings = 0;
+	m_MiniMap = 0;
 }
 
 UserInterfaceClass::UserInterfaceClass(const UserInterfaceClass &other)
@@ -461,11 +462,32 @@ bool UserInterfaceClass::Initialize(D3DClass *Direct3D,
 	if (!result)
 		return false;
 
+	m_MiniMap = new MiniMapClass;
+	if (!m_MiniMap)
+		return false;
+
+	result = m_MiniMap->Initialize(Direct3D->GetDevice(),
+		Direct3D->GetDeviceContext(),
+		screenWidth,
+		screenHeight,
+		1025,
+		1025);
+
+	if (!result)
+		return false;
+
 	return true;
 }
 
 void UserInterfaceClass::Shutdown()
 {
+	if (m_MiniMap)
+	{
+		m_MiniMap->Shutdown();
+		delete m_MiniMap;
+		m_MiniMap = NULL;
+	}
+
 	if (m_renderCountStrings)
 	{
 		m_renderCountStrings[0].Shutdown();
@@ -574,6 +596,8 @@ bool UserInterfaceClass::Frame(ID3D11DeviceContext *deviceContext,
 	if (!result)
 		return false;
 
+	m_MiniMap->PositionUpdate(posX, posY);
+
 	return true;
 }
 
@@ -584,6 +608,7 @@ bool UserInterfaceClass::Render(D3DClass *Direct3D,
 	XMMATRIX orthoMatrix)
 {
 	int i;
+	bool result;
 
 	Direct3D->TurnZBufferOff();
 	Direct3D->EnableAlphaBlending();
@@ -646,6 +671,16 @@ bool UserInterfaceClass::Render(D3DClass *Direct3D,
 			m_font1->GetTexture());
 
 	Direct3D->DisableAlphaBlending();
+
+	result = m_MiniMap->Render(Direct3D->GetDeviceContext(),
+		shaderManager,
+		worldMatrix,
+		viewMatrix,
+		orthoMatrix);
+
+	if (!result)
+		return false;
+
 	Direct3D->TurnZBufferOn();
 
 	return true;
