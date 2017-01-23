@@ -42,7 +42,7 @@ bool MiniMapClass::Initialize(ID3D11Device *device,
 		screenHeight,
 		154,
 		154,
-		"data/minimap/minimap.tga");
+		"data/minimap/minimap.tag");
 	
 	if (!result)
 		return false;
@@ -55,9 +55,9 @@ bool MiniMapClass::Initialize(ID3D11Device *device,
 		deviceContext,
 		screenWidth,
 		screenHeight,
-		3,
-		3,
-		"data/minimap/point.tga");
+		154,
+		154,
+		"data/minimap/point.tag");
 
 	if (!result)
 		return false;
@@ -141,8 +141,8 @@ void MiniMapClass::PositionUpdate(float positionX, float positionZ)
 	percentX = positionX / m_terrainWidth;
 	percentY = 1.0f - positionZ / m_terrainHeight;
 
-	m_pointLocationX = (m_mapLocationX + 2) + (int)(percentX * m_mapSizeX);
-	m_pointLocationY = (m_mapLocationY + 2) + (int)(percentY * m_mapSizeY);
+	m_pointLocationX = (m_mapLocationX + 2) * (int)(percentX * m_mapSizeX);
+	m_pointLocationY = (m_mapLocationY + 2) * (int)(percentY * m_mapSizeY);
 
 	m_pointLocationX -= 1.0f;
 	m_pointLocationY -= 1.0f;
