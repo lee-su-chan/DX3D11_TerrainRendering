@@ -4,7 +4,7 @@
 http://www.rastertek.com/tutdx11s2ter.html
 
 ## Diagram
-![pic4023](https://cloud.githubusercontent.com/assets/13383741/21643936/5a80712a-d2ce-11e6-8b76-9aca403e47dd.gif)
+![pic4023](https://cloud.githubusercontent.com/assets/13383741/22210027/c9312964-e1cb-11e6-8178-8f6768ae4c75.gif)
 
 ## Operation keys
 ↑: 전진  
