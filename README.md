@@ -10,8 +10,8 @@ http://www.rastertek.com/tutdx11s2ter.html
 ↑: 전진  
 ↓: 후진  
 ← →: 회전  
-A: 왼쪽이동  
-D: 오른쪽이동  
+A: 왼쪽 이동  
+D: 오른쪽 이동  
 W: 상승  
 X: 하강  
 PgUp: 시점 위 회전  
@@ -147,7 +147,7 @@ Heightmap파일과 Colormap파일의 용량들이 193KB에서 각각 2MB, 3MB로
 ### 2017-01-16(Tutorial 9 : Terrain Cells)
 #### *Headline*
 ![1](https://cloud.githubusercontent.com/assets/13383741/21964535/fdfc0b3c-db90-11e6-8d43-ad4d8c1eec45.PNG)
-#### *Topview*
+#### *TopView*
 ![2](https://cloud.githubusercontent.com/assets/13383741/21964536/fdfc0cae-db90-11e6-9483-1665c6a9da35.PNG)
 #### *Closely*
 ![3](https://cloud.githubusercontent.com/assets/13383741/21964565/89d271dc-db91-11e6-8537-f1e3a578c2fc.PNG)
@@ -170,7 +170,7 @@ rasterTek이 말하길 지형은 대부분 대규모 데이터이므로 효율�
 이번에 이렇게 하게 되면서 성능과 품질의 타협을 배우고 있는 것 같다.  
 
 ### 2017-01-18(Tutorial 10 : Terrain Cell Culling)
-#### *LookAtNewUI*
+#### *Look At New UI*
 ![1](https://cloud.githubusercontent.com/assets/13383741/22067691/ac6bcd9c-ddd5-11e6-8373-151ccdf7749f.PNG)
 1. UI 추가  
 2. 보이지 않는 셀 컬링 구현  
@@ -206,3 +206,26 @@ rasterTek이 말하길 지형은 대부분 대규모 데이터이므로 효율�
 무언가를 미루는 습관 때문에 이렇게 며칠을 헛되이 보낸 것 같다.  
 한순간에 고쳐지진 않겠지만 고쳐보려 노력하고 있고 고치기 위해서  
 이 프로젝트도 하고 있는 것이다.  
+
+### 2017-01-26(Tutorial 12 : Terrain Mini-Maps)
+#### *Look At TopRight*
+![default](https://cloud.githubusercontent.com/assets/13383741/22325351/ec115efa-e3f0-11e6-8c18-9983b06d820c.PNG)
+1. 미니맵 구현(빨간점은 카메라)  
+2. Height Based Movement 버그 수정  
+
+#### Developer Notes
+이번 단계에서는 미니맵을 구현하였다.  
+  
+미니맵을 구현하는 것은 굉장히 많은 방법이 있지만  
+rasterTek은 LightMap과 ColorMap을 결합하여 3D TopView시점으로 구현하였다.  
+  
+개인적으로 미니맵을 만드는 것은 크게 대단하다고 생각하지 않았는데  
+이번에 구현을 해보면서 미니맵을 구현하는 방법엔 되게 많은 방법들이 있고  
+플레이어에게 흥미를 유발하는 미니맵을 구현하는것 또한 멋있는 일이라고 생각한다.  
+  
+그리고 이번에 Height Based Movement의 버그를 수정하였다.  
+고작 두 줄짜리 버그였지만 플레이어가 불편해하기에는 충분한 버그였다.  
+꽤 늦었지만 그래도 버그를 잡아서 다행이라고 생각한다.  
+  
+튜토리얼이 2장밖에 남지 않았다. 방학중에 끝낼 것 같다.  
+끝낸 후에 무얼해야 할지 고민도 해야 할 것 같다.  
