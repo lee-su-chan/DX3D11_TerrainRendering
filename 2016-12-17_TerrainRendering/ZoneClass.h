@@ -8,7 +8,7 @@
 #include "TimerClass.h"
 #include "UserInterfaceClass.h"
 #include "CameraClass.h"
-#include "LightClass.h"
+#include "LightClass.h"	
 #include "PositionClass.h"
 #include "FrustumClass.h"
 #include "SkyDomeClass.h"

@@ -191,7 +191,7 @@ bool ZoneClass::Frame(D3DClass *direct3D,
 
 	if (m_heightLocked)
 	{
-		foundHeight = m_Terrain->GetHeightAtPosition(posX, posY, height);
+		foundHeight = m_Terrain->GetHeightAtPosition(posX, posZ, height);
 		if (foundHeight)
 		{
 			m_Position->SetPosition(posX, height + 1.0f, posZ);
