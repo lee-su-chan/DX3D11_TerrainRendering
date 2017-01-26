@@ -55,8 +55,8 @@ bool MiniMapClass::Initialize(ID3D11Device *device,
 		deviceContext,
 		screenWidth,
 		screenHeight,
-		154,
-		154,
+		3,
+		3,
 		"data/minimap/point.tga");
 
 	if (!result)
