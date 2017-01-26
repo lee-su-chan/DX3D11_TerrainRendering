@@ -195,7 +195,6 @@ bool TerrainClass::GetHeightAtPosition(float inputX, float inputZ, float &height
 		vertex3[0] = m_TerrainCells[cellId].m_vertexList[index].x;
 		vertex3[1] = m_TerrainCells[cellId].m_vertexList[index].y;
 		vertex3[2] = m_TerrainCells[cellId].m_vertexList[index].z;
-		++index;
 
 		foundHeight = CheckHeightOfTriangle(inputX,
 			inputZ,
