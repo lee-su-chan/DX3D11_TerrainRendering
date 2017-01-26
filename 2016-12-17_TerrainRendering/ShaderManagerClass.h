@@ -2,7 +2,7 @@
 #define _SHADERMANAGERCLASS_H_
 
 #include "D3DClass.h"
-#include "ColorshaderClass.h"
+#include "ColorShaderClass.h"
 #include "TextureShaderClass.h"
 #include "LightShaderClass.h"
 #include "FontShaderClass.h"
