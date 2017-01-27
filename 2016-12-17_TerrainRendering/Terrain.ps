@@ -1,5 +1,6 @@
 Texture2D shaderTexture : register(t0);
 Texture2D normalTexture : register(t1);
+Texture2D normalTexture : register(t2);
 
 SamplerState SampleType : register(s0);
 
@@ -22,27 +23,45 @@ struct PixelInputType
 
 float4 TerrainPixelShader(PixelInputType input) : SV_TARGET
 {
-	float4 textureColor;
+	float slope;
 	float3 lightDir;
+	float4 textureColor1;
+	float4 textureColor2;
 	float3 bumpMap;
 	float3 bumpNormal;
 	float lightIntensity;
+	float4 material1;
+	float4 material2;
 	float4 color;
 
-	textureColor = shaderTexture.Sample(SampleType, input.tex);
-	textureColor = saturate(textureColor * input.color * 2.0f);
-
+	slope = 1.0f - input.normal.y;
 	lightDir = -lightDirection;
 
-	bumpMap = normalTexture.Sample(SampleType, input.tex);
+	textureColor1 = diffuseTexture1.Sample(SampleType, input.tex);
+	bumpMap = normalTexture1.Sample(SampleType, input.tex);
 	bumpMap = (bumpMap * 2.0f) - 1.0f;
 	bumpNormal = bumpMap.x * input.tangent + bumpMap.y * input.binormal + bumpMap.z * input.normal;
 	bumpNormal = normalize(bumpNormal);
-	
 	lightIntensity = saturate(dot(bumpNormal, lightDir));
+	material1 = saturate(textureColor1 * lightIntensity);
 
-	color = saturate(diffuseColor * lightIntensity);
-	color = color * textureColor;
+	textureColor2 = float4(1.0f, 1.0f, 1.0f, 1.0f); // Snow color.
+	bumpMap = normalTexture2.Sample(SampleType, input.tex);
+	bumpMap = (bumpMap * 2.0f) - 1.0f;
+	bumpNormal = bumpMap.x * input.tangent + bumpMap.y * input.binormal + bumpMap.z * input.normal;
+	bumpNormal = normalize(bumpNormal);
+	lightIntensity = saturate(dot(bumpNormal, lightDir));
+	material1 = saturate(textureColor2 * lightIntensity);
+
+	if(slope < 0.2f)
+	{
+		blendAmount = slope / 0.2f;
+		color = lerp(material2, material1, blendAmount);
+	}
+	else if(slope >= 0.2f)
+	{
+		color = material1;
+	}
 
 	return color;
 }
