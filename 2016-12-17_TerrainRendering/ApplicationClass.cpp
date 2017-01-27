@@ -83,7 +83,7 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance,
 
 	result = m_TextureManager->LoadTexture(m_Direct3D->GetDevice(),
 		m_Direct3D->GetDeviceContext(),
-		"data/textures/test.tga",
+		"data/textures/rock01d.tga",
 		0);
 
 	if (!result)
@@ -91,7 +91,7 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance,
 
 	result = m_TextureManager->LoadTexture(m_Direct3D->GetDevice(),
 		m_Direct3D->GetDeviceContext(),
-		"data/textures/dirt01d.tga",
+		"data/textures/rock01n.tga",
 		1);
 
 	if (!result)
@@ -99,7 +99,7 @@ bool ApplicationClass::Initialize(HINSTANCE hinstance,
 
 	result = m_TextureManager->LoadTexture(m_Direct3D->GetDevice(),
 		m_Direct3D->GetDeviceContext(),
-		"data/textures/dirt01n.tga",
+		"data/textures/snow01n.tga",
 		2);
 
 	if (!result)
