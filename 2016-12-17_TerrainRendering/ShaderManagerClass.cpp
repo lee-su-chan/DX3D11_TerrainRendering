@@ -208,6 +208,7 @@ bool ShaderManagerClass::RenderTerrainShader(ID3D11DeviceContext *deviceContext,
 	XMMATRIX projectionMatrix,
 	ID3D11ShaderResourceView *texture,
 	ID3D11ShaderResourceView *normalMap,
+	ID3D11ShaderResourceView *normalMap2,
 	XMFLOAT3 lightDirection,
 	XMFLOAT4 diffuseColor)
 {
@@ -218,6 +219,7 @@ bool ShaderManagerClass::RenderTerrainShader(ID3D11DeviceContext *deviceContext,
 		projectionMatrix,
 		texture,
 		normalMap,
+		normalMap2,
 		lightDirection,
 		diffuseColor);
 }
