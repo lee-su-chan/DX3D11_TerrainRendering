@@ -1,6 +1,6 @@
-Texture2D shaderTexture : register(t0);
-Texture2D normalTexture : register(t1);
-Texture2D normalTexture : register(t2);
+Texture2D diffuseTexture1 : register(t0);
+Texture2D normalTexture1 : register(t1);
+Texture2D normalTexture2 : register(t2);
 
 SamplerState SampleType : register(s0);
 
@@ -32,6 +32,7 @@ float4 TerrainPixelShader(PixelInputType input) : SV_TARGET
 	float lightIntensity;
 	float4 material1;
 	float4 material2;
+	float blendAmount;
 	float4 color;
 
 	slope = 1.0f - input.normal.y;
@@ -51,7 +52,7 @@ float4 TerrainPixelShader(PixelInputType input) : SV_TARGET
 	bumpNormal = bumpMap.x * input.tangent + bumpMap.y * input.binormal + bumpMap.z * input.normal;
 	bumpNormal = normalize(bumpNormal);
 	lightIntensity = saturate(dot(bumpNormal, lightDir));
-	material1 = saturate(textureColor2 * lightIntensity);
+	material2 = saturate(textureColor2 * lightIntensity);
 
 	if(slope < 0.2f)
 	{
