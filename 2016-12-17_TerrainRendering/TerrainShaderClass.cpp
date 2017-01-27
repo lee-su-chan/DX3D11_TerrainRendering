@@ -43,6 +43,7 @@ bool TerrainShaderClass::Render(ID3D11DeviceContext *deviceContext,
 	XMMATRIX projectionMatrix,
 	ID3D11ShaderResourceView *texture,
 	ID3D11ShaderResourceView *normalMap,
+	ID3D11ShaderResourceView *normalMap2,
 	XMFLOAT3 lightDirection,
 	XMFLOAT4 diffuseColor)
 {
@@ -54,6 +55,7 @@ bool TerrainShaderClass::Render(ID3D11DeviceContext *deviceContext,
 		projectionMatrix,
 		texture,
 		normalMap,
+		normalMap2,
 		lightDirection,
 		diffuseColor);
 
@@ -315,6 +317,7 @@ bool TerrainShaderClass::SetShaderParameters(ID3D11DeviceContext *deviceContext,
 	XMMATRIX projectionMatrix,
 	ID3D11ShaderResourceView *texture,
 	ID3D11ShaderResourceView *normalMap,
+	ID3D11ShaderResourceView *normalMap2,
 	XMFLOAT3 lightDirection,
 	XMFLOAT4 diffuseColor)
 {
@@ -350,6 +353,7 @@ bool TerrainShaderClass::SetShaderParameters(ID3D11DeviceContext *deviceContext,
 	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
 	deviceContext->PSSetShaderResources(0, 1, &texture);
 	deviceContext->PSSetShaderResources(1, 1, &normalMap);
+	deviceContext->PSSetShaderResources(2, 1, &normalMap2);
 
 	result = deviceContext->Map(m_lightBuffer,
 		0,
