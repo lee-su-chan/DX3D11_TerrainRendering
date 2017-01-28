@@ -23,6 +23,7 @@ private:
 	{
 		float x, y, z;
 		float tu, tv;
+		float tu2, tv2;
 		float nx, ny, nz;
 		float tx, ty, tz;
 		float bx, by, bz;

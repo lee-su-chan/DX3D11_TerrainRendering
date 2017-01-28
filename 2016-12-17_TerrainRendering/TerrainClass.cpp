@@ -602,12 +602,21 @@ bool TerrainClass::LoadColorMap()
 bool TerrainClass::BuildTerrainModel()
 {
 	int i, j, index, index1, index2, index3, index4;
+	float quadsCovered, incrementSize, tu2Left, tu2Right, tv2Bottom, tv2Top;
 
 	m_vertexCount = (m_terrainHeight - 1) * (m_terrainWidth - 1) * 6;
 
 	m_terrainModel = new ModelType[m_vertexCount];
 	if (!m_terrainModel)
 		return false;
+
+	quadsCovered = 32.0f;
+	incrementSize = 1.0f / quadsCovered;
+
+	tu2Left = 0.0f;
+	tu2Right = incrementSize;
+	tv2Top = 0.0f;
+	tv2Bottom = incrementSize;
 
 	index = 0;
 
@@ -628,6 +637,8 @@ bool TerrainClass::BuildTerrainModel()
 			m_terrainModel[index].z = m_heightMap[index1].z;
 			m_terrainModel[index].tu = 0.0f;
 			m_terrainModel[index].tv = 0.0f;
+			m_terrainModel[index].tu2 = tu2Left;
+			m_terrainModel[index].tv2 = tv2Top;
 			m_terrainModel[index].nx = m_heightMap[index1].nx;
 			m_terrainModel[index].ny = m_heightMap[index1].ny;
 			m_terrainModel[index].nz = m_heightMap[index1].nz;
@@ -642,6 +653,8 @@ bool TerrainClass::BuildTerrainModel()
 			m_terrainModel[index].z = m_heightMap[index2].z;
 			m_terrainModel[index].tu = 1.0f;
 			m_terrainModel[index].tv = 0.0f;
+			m_terrainModel[index].tu2 = tu2Right;
+			m_terrainModel[index].tv2 = tv2Top;
 			m_terrainModel[index].nx = m_heightMap[index2].nx;
 			m_terrainModel[index].ny = m_heightMap[index2].ny;
 			m_terrainModel[index].nz = m_heightMap[index2].nz;
@@ -656,6 +669,8 @@ bool TerrainClass::BuildTerrainModel()
 			m_terrainModel[index].z = m_heightMap[index3].z;
 			m_terrainModel[index].tu = 0.0f;
 			m_terrainModel[index].tv = 1.0f;
+			m_terrainModel[index].tu2 = tu2Left;
+			m_terrainModel[index].tv2 = tv2Bottom;
 			m_terrainModel[index].nx = m_heightMap[index3].nx;
 			m_terrainModel[index].ny = m_heightMap[index3].ny;
 			m_terrainModel[index].nz = m_heightMap[index3].nz;
@@ -669,10 +684,12 @@ bool TerrainClass::BuildTerrainModel()
 			m_terrainModel[index].y = m_heightMap[index3].y;
 			m_terrainModel[index].z = m_heightMap[index3].z;
 			m_terrainModel[index].tu = 0.0f;
+			m_terrainModel[index].tv = 1.0f;
+			m_terrainModel[index].tu2 = tu2Left;
+			m_terrainModel[index].tv2 = tv2Bottom;
 			m_terrainModel[index].nx = m_heightMap[index3].nx;
 			m_terrainModel[index].ny = m_heightMap[index3].ny;
 			m_terrainModel[index].nz = m_heightMap[index3].nz;
-			m_terrainModel[index].tv = 1.0f;
 			m_terrainModel[index].r = m_heightMap[index3].r;
 			m_terrainModel[index].g = m_heightMap[index3].g;
 			m_terrainModel[index].b = m_heightMap[index3].b;
@@ -684,6 +701,8 @@ bool TerrainClass::BuildTerrainModel()
 			m_terrainModel[index].z = m_heightMap[index2].z;
 			m_terrainModel[index].tu = 1.0f;
 			m_terrainModel[index].tv = 0.0f;
+			m_terrainModel[index].tu2 = tu2Right;
+			m_terrainModel[index].tv2 = tv2Top;
 			m_terrainModel[index].nx = m_heightMap[index2].nx;
 			m_terrainModel[index].ny = m_heightMap[index2].ny;
 			m_terrainModel[index].nz = m_heightMap[index2].nz;
@@ -698,6 +717,8 @@ bool TerrainClass::BuildTerrainModel()
 			m_terrainModel[index].z = m_heightMap[index4].z;
 			m_terrainModel[index].tu = 1.0f;
 			m_terrainModel[index].tv = 1.0f;
+			m_terrainModel[index].tu2 = tu2Right;
+			m_terrainModel[index].tv2 = tv2Bottom;
 			m_terrainModel[index].nx = m_heightMap[index4].nx;
 			m_terrainModel[index].ny = m_heightMap[index4].ny;
 			m_terrainModel[index].nz = m_heightMap[index4].nz;
@@ -705,6 +726,24 @@ bool TerrainClass::BuildTerrainModel()
 			m_terrainModel[index].g = m_heightMap[index4].g;
 			m_terrainModel[index].b = m_heightMap[index4].b;
 			++index;
+
+			tu2Left += incrementSize;
+			tu2Right += incrementSize;
+
+			if (tu2Right > 1.0f)
+			{
+				tu2Left = 0.0f;
+				tu2Right = incrementSize;
+			}
+		}
+
+		tv2Top += incrementSize;
+		tv2Bottom += incrementSize;
+
+		if (tv2Bottom > 1.0f)
+		{
+			tv2Top = 0.0f;
+			tv2Bottom = incrementSize;
 		}
 	}
 
