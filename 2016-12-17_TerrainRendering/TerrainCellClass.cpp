@@ -154,6 +154,8 @@ bool TerrainCellClass::InitializeBuffers(ID3D11Device *device,
 				terrainModel[modelIndex].z);
 			vertices[index].texture = XMFLOAT2(terrainModel[modelIndex].tu,
 				terrainModel[modelIndex].tv);
+			vertices[index].texture2 = XMFLOAT2(terrainModel[modelIndex].tu2,
+				terrainModel[modelIndex].tv2);
 			vertices[index].normal = XMFLOAT3(terrainModel[modelIndex].nx,
 				terrainModel[modelIndex].ny,
 				terrainModel[modelIndex].nz);

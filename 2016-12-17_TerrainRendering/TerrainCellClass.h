@@ -13,6 +13,7 @@ private:
 	{
 		float x, y, z;
 		float tu, tv;
+		float tu2, tv2;
 		float nx, ny, nz;
 		float tx, ty, tz;
 		float bx, by, bz;
@@ -27,6 +28,7 @@ private:
 		XMFLOAT3 tangent;
 		XMFLOAT3 binormal;
 		XMFLOAT3 color;
+		XMFLOAT2 texture2;
 	};
 
 	struct VectorType
