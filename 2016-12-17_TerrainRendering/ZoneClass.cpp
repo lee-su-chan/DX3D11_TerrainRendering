@@ -329,6 +329,7 @@ bool ZoneClass::Render(D3DClass *direct3D,
 				textureManager->GetTexture(0),
 				textureManager->GetTexture(1),
 				textureManager->GetTexture(2),
+				textureManager->GetTexture(3),
 				m_Light->GetDirection(),
 				m_Light->GetDiffuseColor());
 
@@ -381,27 +382,27 @@ bool ZoneClass::Render(D3DClass *direct3D,
 // 0 - 257 : 129
 void ZoneClass::PushedF3Button(float frameTime)
 {
-	//XMFLOAT3 dir;
-	//
-	//dir = m_Light->GetDirection();
-	//
-	//if (dir.x >= 360) dir.x -= 360;
-	//if (dir.y >= 360) dir.y -= 360;
-	//if (dir.z >= 360) dir.z -= 360;
-	//
-	//dir.z -= frameTime / 5;
-	//
-	//m_Light->SetDirection(dir.x, dir.y, dir.z);
+	XMFLOAT3 dir;
 	
-	XMFLOAT4 tempColor;
-
-	tempColor = m_SkyDome->GetApexColor();
-
-	tempColor.x -= frameTime / 5; // R
-	tempColor.y -= frameTime / 5; // G
-	tempColor.z -= frameTime / 5; // B
-
-	m_SkyDome->SetApexColor(tempColor);
+	dir = m_Light->GetDirection();
+	
+	if (dir.x >= 360) dir.x -= 360;
+	if (dir.y >= 360) dir.y -= 360;
+	if (dir.z >= 360) dir.z -= 360;
+	
+	dir.z -= frameTime / 5;
+	
+	m_Light->SetDirection(dir.x, dir.y, dir.z);
+	
+	//XMFLOAT4 tempColor;
+	//
+	//tempColor = m_SkyDome->GetApexColor();
+	//
+	//tempColor.x -= frameTime / 5; // R
+	//tempColor.y -= frameTime / 5; // G
+	//tempColor.z -= frameTime / 5; // B
+	//
+	//m_SkyDome->SetApexColor(tempColor);
 
 	return;
 }
