@@ -44,6 +44,7 @@ bool TerrainShaderClass::Render(ID3D11DeviceContext *deviceContext,
 	ID3D11ShaderResourceView *texture,
 	ID3D11ShaderResourceView *normalMap,
 	ID3D11ShaderResourceView *normalMap2,
+	ID3D11ShaderResourceView *normalMap3,
 	XMFLOAT3 lightDirection,
 	XMFLOAT4 diffuseColor)
 {
@@ -56,6 +57,7 @@ bool TerrainShaderClass::Render(ID3D11DeviceContext *deviceContext,
 		texture,
 		normalMap,
 		normalMap2,
+		normalMap3,
 		lightDirection,
 		diffuseColor);
 
@@ -76,7 +78,7 @@ bool TerrainShaderClass::InitializeShader(ID3D11Device *device,
 	ID3D10Blob *errorMessage;
 	ID3D10Blob *vertexShaderBuffer;
 	ID3D10Blob *pixelShaderBuffer;
-	D3D11_INPUT_ELEMENT_DESC polygonLayout[6];
+	D3D11_INPUT_ELEMENT_DESC polygonLayout[7];
 	unsigned int numElements;
 	D3D11_BUFFER_DESC matrixBufferDesc;
 	D3D11_SAMPLER_DESC samplerDesc;
@@ -189,6 +191,14 @@ bool TerrainShaderClass::InitializeShader(ID3D11Device *device,
 	polygonLayout[5].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 	polygonLayout[5].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	polygonLayout[5].InstanceDataStepRate = 0;
+
+	polygonLayout[6].SemanticName = "TEXCOORD";
+	polygonLayout[6].SemanticIndex = 1;
+	polygonLayout[6].Format = DXGI_FORMAT_R32G32_FLOAT;
+	polygonLayout[6].InputSlot = 0;
+	polygonLayout[6].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+	polygonLayout[6].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	polygonLayout[6].InstanceDataStepRate = 0;
 
 	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
@@ -318,6 +328,7 @@ bool TerrainShaderClass::SetShaderParameters(ID3D11DeviceContext *deviceContext,
 	ID3D11ShaderResourceView *texture,
 	ID3D11ShaderResourceView *normalMap,
 	ID3D11ShaderResourceView *normalMap2,
+	ID3D11ShaderResourceView *normalMap3,
 	XMFLOAT3 lightDirection,
 	XMFLOAT4 diffuseColor)
 {
@@ -351,9 +362,11 @@ bool TerrainShaderClass::SetShaderParameters(ID3D11DeviceContext *deviceContext,
 	bufferNumber = 0;
 
 	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+
 	deviceContext->PSSetShaderResources(0, 1, &texture);
 	deviceContext->PSSetShaderResources(1, 1, &normalMap);
 	deviceContext->PSSetShaderResources(2, 1, &normalMap2);
+	deviceContext->PSSetShaderResources(3, 1, &normalMap3);
 
 	result = deviceContext->Map(m_lightBuffer,
 		0,
