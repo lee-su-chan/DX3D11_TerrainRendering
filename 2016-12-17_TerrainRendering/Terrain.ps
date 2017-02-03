@@ -50,7 +50,6 @@ float4 TerrainPixelShader(PixelInputType input) : SV_TARGET
 	else
 		bumpMap = normalTexture1.Sample(SampleType, input.tex);
 
-	bumpMap = normalTexture1.Sample(SampleType, input.tex);
 	bumpMap = (bumpMap * 2.0f) - 1.0f;
 	bumpNormal = bumpMap.x * input.tangent + bumpMap.y * input.binormal + bumpMap.z * input.normal;
 	bumpNormal = normalize(bumpNormal);
