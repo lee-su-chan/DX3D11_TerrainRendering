@@ -48,7 +48,7 @@ float4 TerrainPixelShader(PixelInputType input) : SV_TARGET
 	if(depthValue > 0.998f)
 		bumpMap = normalTexture3.Sample(SampleType, input.tex2);
 	else
-		bumpMap = normalTexture3.Sample(SampleType, input.tex);
+		bumpMap = normalTexture1.Sample(SampleType, input.tex);
 
 	bumpMap = normalTexture1.Sample(SampleType, input.tex);
 	bumpMap = (bumpMap * 2.0f) - 1.0f;
