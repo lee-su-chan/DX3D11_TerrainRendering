@@ -232,9 +232,10 @@ rasterTek은 LightMap과 ColorMap을 결합하여 3D TopView시점으로 구현�
 
 ### 2017-01-27(Tutorial 13 : Procedural Terrain Texturing)
 #### *Headline*
-![default](https://cloud.githubusercontent.com/assets/13383741/22371801/8a171388-e4dc-11e6-9a6f-6c487b6a71c4.PNG)
-1. 절차적 지형 텍스쳐링 구현
-
+![default](https://cloud.githubusercontent.com/assets/13383741/23616512/523ce35c-02cd-11e7-8499-105f5361fd01.PNG)
+1. 절차적 지형 텍스쳐링 구현  
+2. (2017-03-07) 셰이더 구문 버그 수정  
+3. (2017-03-07) 스크린샷 변경  
 #### Developer Notes
 이번에는 절차적 지형 텍스쳐링을 구현했다.  
   
