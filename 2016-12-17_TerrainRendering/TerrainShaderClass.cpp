@@ -211,6 +211,12 @@ bool TerrainShaderClass::InitializeShader(ID3D11Device *device,
 	if (FAILED(result))
 		return false;
 
+	vertexShaderBuffer->Release();
+	vertexShaderBuffer = NULL;
+
+	pixelShaderBuffer->Release();
+	pixelShaderBuffer = NULL;
+
 	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	matrixBufferDesc.ByteWidth = sizeof(MatrixBufferType);
 	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
