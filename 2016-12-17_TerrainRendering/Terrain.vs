@@ -39,6 +39,7 @@ PixelInputType TerrainVertexShader(VertexInputType input)
 	output.position = mul(output.position, projectionMatrix);
 
 	output.tex = input.tex;
+	output.tex2 = input.tex2;
 
 	output.normal = mul(input.normal, (float3x3)worldMatrix);
 	output.normal = normalize(output.normal);
