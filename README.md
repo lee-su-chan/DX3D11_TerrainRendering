@@ -232,10 +232,9 @@ rasterTek은 LightMap과 ColorMap을 결합하여 3D TopView시점으로 구현�
 
 ### 2017-01-27(Tutorial 13 : Procedural Terrain Texturing)
 #### *Headline*
-![default](https://cloud.githubusercontent.com/assets/13383741/23616512/523ce35c-02cd-11e7-8499-105f5361fd01.PNG)
+![default](https://cloud.githubusercontent.com/assets/13383741/22371801/8a171388-e4dc-11e6-9a6f-6c487b6a71c4.PNG)
 1. 절차적 지형 텍스쳐링 구현  
-2. (2017-03-07) 셰이더 구문 버그 수정  
-3. (2017-03-07) 스크린샷 변경  
+
 #### Developer Notes
 이번에는 절차적 지형 텍스쳐링을 구현했다.  
   
@@ -254,3 +253,23 @@ rasterTek은 LightMap과 ColorMap을 결합하여 3D TopView시점으로 구현�
 정말 셰이더가 엄청난 일을 한다고 이번을 계기로 생각하게 되었다.  
 하지만 셰이더 구문은 거의 수학이 대부분이고 HLSL언어도 잘 모르니 앞으로가 걱정이다.  
 좀 더 많이 찾아보고 배워야겠다.  
+
+## 2017-03-07(Tutorial 14: Distance Normal Mapping)
+#### *Headline*
+![default](https://cloud.githubusercontent.com/assets/13383741/23616512/523ce35c-02cd-11e7-8499-105f5361fd01.PNG)
+1. 거리에 따른 노말 맵핑 구현  
+
+#### Developer Notes
+이번 단계에서는 거리에 따른 노말 매핑을 구현했다.  
+  
+노말 맵핑은 전에도 한 번 했었고 또 김포프님이 쓰신 셰이더 입문책도  
+읽으면서 그 부분을 봤기 때문에 이해하는데에는 어려움이 크게 없었다.  
+그 책을 읽고나서 알게 된 건데 처음에 노말 맵핑을 하고나서 쓴  
+Developer Notes를 보면 언 뜻 보면 맞게 쓴 것 같지만 사실  
+머리속으로는 몇 가지를 빠뜨리고 잘못 이해하고 있었다.  
+  
+최근 단계 이후 1개월이 넘게 지나고서야 드디어 마지막 단계를 끝마쳤다.  
+거의 3달간 한 프로젝트이기 때문에 얻은 지식도 많은 것 같다.  
+  
+내가 프로그래밍을 하면서 어떤 분야를 이렇게 까지 오래 흥미를 가져본 적이 없었는데,  
+그런걸 보면 난 이쪽 분야가 맞는 것 같다.  
