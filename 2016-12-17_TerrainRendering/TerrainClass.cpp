@@ -35,9 +35,9 @@ bool TerrainClass::Initialize(ID3D11Device *device, char *setupFilename)
 	if (!result)
 		return false;
 
-	result = LoadColorMap();
-	if (!result)
-		return false;
+	//result = LoadColorMap();
+	//if (!result)
+	//	return false;
 
 	result = BuildTerrainModel();
 	if (!result)
@@ -222,9 +222,9 @@ bool TerrainClass::LoadSetupFile(char *filename)
 	if (!m_terrainFilename)
 		return false;
 
-	m_colorMapFilename = new char[stringLength];
-	if (!m_colorMapFilename)
-		return false;
+	//m_colorMapFilename = new char[stringLength];
+	//if (!m_colorMapFilename)
+	//	return false;
 
 	fin.open(filename);
 	if (fin.fail())
@@ -253,7 +253,8 @@ bool TerrainClass::LoadSetupFile(char *filename)
 	fin.get(input);
 	while (input != ':')
 		fin.get(input);
-	fin >> m_colorMapFilename;
+	
+	//fin >> m_colorMapFilename;
 
 	fin.close();
 
@@ -448,9 +449,9 @@ bool TerrainClass::CalculateNormals()
 			vector1[0] = vertex1[0] - vertex3[0];
 			vector1[1] = vertex1[1] - vertex3[1];
 			vector1[2] = vertex1[2] - vertex3[2];
-			vector2[1] = vertex3[0] - vertex2[0];
+			vector2[0] = vertex3[0] - vertex2[0];
 			vector2[1] = vertex3[1] - vertex2[1];
-			vector2[1] = vertex3[2] - vertex2[2];
+			vector2[2] = vertex3[2] - vertex2[2];
 
 			index = j * (m_terrainWidth - 1) + i;
 
@@ -807,23 +808,23 @@ void TerrainClass::CalculateTerrainVectors()
 		m_terrainModel[index - 1].tx = tangent.x;
 		m_terrainModel[index - 1].ty = tangent.y;
 		m_terrainModel[index - 1].tz = tangent.z;
-		m_terrainModel[index - 1].bx = tangent.x;
-		m_terrainModel[index - 1].by = tangent.y;
-		m_terrainModel[index - 1].bz = tangent.z;
+		m_terrainModel[index - 1].bx = binormal.x;
+		m_terrainModel[index - 1].by = binormal.y;
+		m_terrainModel[index - 1].bz = binormal.z;
 
 		m_terrainModel[index - 2].tx = tangent.x;
 		m_terrainModel[index - 2].ty = tangent.y;
 		m_terrainModel[index - 2].tz = tangent.z;
-		m_terrainModel[index - 2].bx = tangent.x;
-		m_terrainModel[index - 2].by = tangent.y;
-		m_terrainModel[index - 2].bz = tangent.z;
+		m_terrainModel[index - 2].bx = binormal.x;
+		m_terrainModel[index - 2].by = binormal.y;
+		m_terrainModel[index - 2].bz = binormal.z;
 
 		m_terrainModel[index - 3].tx = tangent.x;
 		m_terrainModel[index - 3].ty = tangent.y;
 		m_terrainModel[index - 3].tz = tangent.z;
-		m_terrainModel[index - 3].bx = tangent.x;
-		m_terrainModel[index - 3].by = tangent.y;
-		m_terrainModel[index - 3].bz = tangent.z;
+		m_terrainModel[index - 3].bx = binormal.x;
+		m_terrainModel[index - 3].by = binormal.y;
+		m_terrainModel[index - 3].bz = binormal.z;
 	}
 
 	return;
